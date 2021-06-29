@@ -1,0 +1,16 @@
+PODS:
+  - UnitAudioConverter (0.1.0)
+
+DEPENDENCIES:
+  - UnitAudioConverter (from `../`)
+
+EXTERNAL SOURCES:
+  UnitAudioConverter:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  UnitAudioConverter: 4565e5d8a7fb9687b6b6054a73826eace66f01b2
+
+PODFILE CHECKSUM: 89b59a611278d0e0cb6c742c2e1e2fd970f4f7c7
+
+COCOAPODS: 1.10.1

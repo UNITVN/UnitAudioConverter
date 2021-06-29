@@ -9,34 +9,25 @@
 Pod::Spec.new do |s|
   s.name             = 'UnitAudioConverter'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of UnitAudioConverter.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
-
-  s.homepage         = 'https://github.com/Quang Tran/UnitAudioConverter'
+  s.summary          = 'Convert audio file into different formats.'
+  s.homepage         = 'https://github.com/trmquang93/UnitAudioConverter'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.license          = { :type => 'MIT' }
   s.author           = { 'Quang Tran' => 'trmquang3103@gmail.com' }
-  s.source           = { :git => 'https://github.com/Quang Tran/UnitAudioConverter.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/trmquang93/UnitAudioConverter.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
-  s.ios.deployment_target = '9.0'
-
+  
+  s.platform = :ios
+  s.ios.deployment_target = '11.0'
+  s.swift_version = '5.4'
   s.source_files = 'UnitAudioConverter/Classes/**/*'
   
   # s.resource_bundles = {
   #   'UnitAudioConverter' => ['UnitAudioConverter/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+   s.public_header_files = 'UnitAudioConverter/**/Headers/Public/*.h'
+   s.vendored_library = 'UnitAudioConverter/libmp3lame.a'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end

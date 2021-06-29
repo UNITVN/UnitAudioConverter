@@ -1,0 +1,6 @@
+framework module Pods_UnitAudioConverter_Example {
+  umbrella header "Pods-UnitAudioConverter_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}
