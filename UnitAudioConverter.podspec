@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UnitAudioConverter'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'Convert audio file into different formats.'
   s.homepage         = 'https://github.com/trmquang93/UnitAudioConverter'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # }
 
    s.public_header_files = 'UnitAudioConverter/**/Headers/Public/*.h'
-   s.vendored_library = 'UnitAudioConverter/libmp3lame.a'
+   s.vendored_libraries = 'UnitAudioConverter/libmp3lame.a'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
