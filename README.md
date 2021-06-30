@@ -28,3 +28,14 @@ Quang Tran, trmquang3103@gmail.com
 
 UnitAudioConverter is available under the MIT license. See the LICENSE file for more info.
 # UnitAudioConverter
+
+```swift
+let outputType: UAFileType = .mp3
+let fileInfo = UAConvertFileInfo(outputType: outputType, source: filePath, destination: fileDestination)
+            
+UAConverter.shared.convert(fileInfo: fileInfo)
+    .completion { [weak self] error in
+        print("finished: \(outputType.name)")
+        print(error as Any)
+    }
+```
