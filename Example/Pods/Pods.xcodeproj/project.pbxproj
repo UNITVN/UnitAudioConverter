@@ -38,15 +38,15 @@
 		02CA1D5348417F605D17B902A140C5DB /* Pods-UnitAudioConverter_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-UnitAudioConverter_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		084ED0E5BA1F75D74B8C2F98466FB622 /* UAConvertFileInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConvertFileInfo.swift; path = UnitAudioConverter/Classes/UAConvertFileInfo.swift; sourceTree = "<group>"; };
 		1536C10A983B9B8DEC89722BBD9AEEA4 /* Pods-UnitAudioConverter_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-UnitAudioConverter_Example-frameworks.sh"; sourceTree = "<group>"; };
-		2160058D9F9C1034F531D0BF4459E2BA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		2160058D9F9C1034F531D0BF4459E2BA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		2D215E778AC2FF00DE68D7D58D12AD39 /* UnitAudioConverter-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "UnitAudioConverter-Info.plist"; sourceTree = "<group>"; };
 		2EFF9C46F7415DCD81138ABC94AC312D /* UAFileType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAFileType.swift; path = UnitAudioConverter/Classes/UAFileType.swift; sourceTree = "<group>"; };
 		301016B43AEF13E1E5438A2FCBEC084C /* Pods-UnitAudioConverter_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UnitAudioConverter_Example.release.xcconfig"; sourceTree = "<group>"; };
-		3A26DB42772E58C196F22DCE91BEB213 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		3A26DB42772E58C196F22DCE91BEB213 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4CDF61F258FF9C0B128441E381F4F6AC /* Pods-UnitAudioConverter_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-UnitAudioConverter_Example-dummy.m"; sourceTree = "<group>"; };
 		527B4DCE771DFB7574C1E411090BD38B /* Pods-UnitAudioConverter_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-UnitAudioConverter_Example.modulemap"; sourceTree = "<group>"; };
 		59C6474FE05C88FA21ACEA073413CA86 /* Pods-UnitAudioConverter_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UnitAudioConverter_Example-Info.plist"; sourceTree = "<group>"; };
-		5F4DF3F257D4741BFB6C9FB93EA9B854 /* UnitAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = UnitAudioConverter.framework; path = UnitAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F4DF3F257D4741BFB6C9FB93EA9B854 /* UnitAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UnitAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65E922949E92421DA0552BBD5D1BCDEB /* UAConvertSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConvertSession.swift; path = UnitAudioConverter/Classes/UAConvertSession.swift; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		7D1D02E3CE839F51146EEEEA4880F5A4 /* UnitAudioConverter-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UnitAudioConverter-dummy.m"; sourceTree = "<group>"; };
@@ -55,14 +55,14 @@
 		894586036EA4D485892F149DB0DC600D /* UnitAudioConverter-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UnitAudioConverter-umbrella.h"; sourceTree = "<group>"; };
 		8D64A5768666947E84F66BC6F1A7F2AD /* UnitAudioConverter.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = UnitAudioConverter.modulemap; sourceTree = "<group>"; };
 		9D8A20E9C2E93AFEE475E5F6FA97BEA9 /* ExtAudioConverter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ExtAudioConverter.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B0369F95F1AC5083B2EC0DCE0AE83103 /* UnitAudioConverter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = UnitAudioConverter.debug.xcconfig; sourceTree = "<group>"; };
 		BA533BD4AF08BCD7E05E43F8E3E7E6A0 /* Pods-UnitAudioConverter_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UnitAudioConverter_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		BB35522C16A21B4C902BC67AB2E88890 /* lame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
 		C35DA1FD019574ECCFC8BE11381D518B /* UnitAudioConverter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = UnitAudioConverter.release.xcconfig; sourceTree = "<group>"; };
-		CA9365B34527DC1F9D4C0EBB3639B2F4 /* Pods_UnitAudioConverter_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_UnitAudioConverter_Example.framework; path = "Pods-UnitAudioConverter_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA9365B34527DC1F9D4C0EBB3639B2F4 /* Pods_UnitAudioConverter_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UnitAudioConverter_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD7B72C29492B8BD3729C3E2FE3CD5DB /* UAConverter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConverter.swift; path = UnitAudioConverter/Classes/UAConverter.swift; sourceTree = "<group>"; };
-		EEB0941BC4261A37470800554EA72AA2 /* UnitAudioConverter.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = UnitAudioConverter.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		EEB0941BC4261A37470800554EA72AA2 /* UnitAudioConverter.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = UnitAudioConverter.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		FE5E367253467CFFB8F55B8EF4ECD818 /* libmp3lame.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libmp3lame.a; path = UnitAudioConverter/libmp3lame.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,7 +143,6 @@
 				9D8A20E9C2E93AFEE475E5F6FA97BEA9 /* ExtAudioConverter.h */,
 				BB35522C16A21B4C902BC67AB2E88890 /* lame.h */,
 			);
-			name = Public;
 			path = Public;
 			sourceTree = "<group>";
 		};
@@ -392,6 +391,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -426,6 +426,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -553,8 +554,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
