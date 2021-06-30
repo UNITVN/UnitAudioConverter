@@ -7,23 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2300336F68DB3AA261FCFCC84F9BF6C6 /* ExtAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D8A20E9C2E93AFEE475E5F6FA97BEA9 /* ExtAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2ED13DF938CA3F26A654EE77F59AB5D8 /* UAFileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF9C46F7415DCD81138ABC94AC312D /* UAFileType.swift */; };
+		2ED13DF938CA3F26A654EE77F59AB5D8 /* UAFileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72E276016598B7840FB8CC67FC40805 /* UAFileType.swift */; };
 		35ECE04C0F05F3C5FA39E1EFC881EF2B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		38999EDBB7206341DB71DF95B03EF975 /* UAConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7B72C29492B8BD3729C3E2FE3CD5DB /* UAConverter.swift */; };
+		38999EDBB7206341DB71DF95B03EF975 /* UAConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EA2B49113732B68AB73E3F3DCF8612 /* UAConverter.swift */; };
 		48F601B9F1C8C3F9EDA539CBD2AEC4B7 /* Pods-UnitAudioConverter_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF61F258FF9C0B128441E381F4F6AC /* Pods-UnitAudioConverter_Example-dummy.m */; };
 		52F84B32637267B2DAE4C419FF55E430 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
 		570C8150F4453EE675002F5927F4532C /* Pods-UnitAudioConverter_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14138EE85F63C91C39ACB53276129C /* Pods-UnitAudioConverter_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6E2A7A2220D3D88A66BA0EFBA68FA160 /* UAConvertFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084ED0E5BA1F75D74B8C2F98466FB622 /* UAConvertFileInfo.swift */; };
-		A0B640A4687E2DDBFCF87F393DD86CAE /* UnitAudioConverter-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 894586036EA4D485892F149DB0DC600D /* UnitAudioConverter-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B29378E5DB59A7676E34183E4766C578 /* UnitAudioConverter-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D02E3CE839F51146EEEEA4880F5A4 /* UnitAudioConverter-dummy.m */; };
-		D163186CCF65192BC69A6CD7902F0261 /* ExtAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0241CCEC888A753ED510DFFFCAA4B572 /* ExtAudioConverter.m */; };
-		DFAAFFA843495AF4F285F600A823BAB0 /* UAConvertSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E922949E92421DA0552BBD5D1BCDEB /* UAConvertSession.swift */; };
-		F6A7C3B4DD8AD89BA2F160141528DE32 /* lame.h in Headers */ = {isa = PBXBuildFile; fileRef = BB35522C16A21B4C902BC67AB2E88890 /* lame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E2A7A2220D3D88A66BA0EFBA68FA160 /* UAConvertFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713B6A2FD4F4274079E46324C96B0DE2 /* UAConvertFileInfo.swift */; };
+		81F7CC3857D4CF4ADEFABAB1F3E3A073 /* lame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C5DAC272A669F5DC9BCDDD693919037 /* lame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B29378E5DB59A7676E34183E4766C578 /* UnitAudioConverter-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 497299A2410894CF7FD8FFD32F3E910A /* UnitAudioConverter-dummy.m */; };
+		CEC520257F6BAB6C10AB620FA9835D01 /* ExtAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = EF4E33CF0D904CFA25746B5CB5294071 /* ExtAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D163186CCF65192BC69A6CD7902F0261 /* ExtAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = F8D41AEFBFBE19B97528E7CAB6A50836 /* ExtAudioConverter.m */; };
+		DFAAFFA843495AF4F285F600A823BAB0 /* UAConvertSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8009475438DC04F7AC0AE3EAA475AF0 /* UAConvertSession.swift */; };
+		F27BF1813DDBE0EA38CFA871FE9A3384 /* UnitAudioConverter-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DC9F83AA4EA652D5944DD5B641E6F5A /* UnitAudioConverter-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		41EF1BF06DE10E3300B76043986BCEFB /* PBXContainerItemProxy */ = {
+		22C809378F7B811119BF90F2C31A84E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -34,36 +34,33 @@
 
 /* Begin PBXFileReference section */
 		006CBDF5566D21E5150C17358CCEC843 /* Pods-UnitAudioConverter_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UnitAudioConverter_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		0241CCEC888A753ED510DFFFCAA4B572 /* ExtAudioConverter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtAudioConverter.m; path = UnitAudioConverter/Classes/ExtAudioConverter.m; sourceTree = "<group>"; };
 		02CA1D5348417F605D17B902A140C5DB /* Pods-UnitAudioConverter_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-UnitAudioConverter_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		084ED0E5BA1F75D74B8C2F98466FB622 /* UAConvertFileInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConvertFileInfo.swift; path = UnitAudioConverter/Classes/UAConvertFileInfo.swift; sourceTree = "<group>"; };
+		0AFC0E7A7E2985D50EE18ED1768102A9 /* UnitAudioConverter-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UnitAudioConverter-prefix.pch"; sourceTree = "<group>"; };
 		1536C10A983B9B8DEC89722BBD9AEEA4 /* Pods-UnitAudioConverter_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-UnitAudioConverter_Example-frameworks.sh"; sourceTree = "<group>"; };
-		2160058D9F9C1034F531D0BF4459E2BA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		2D215E778AC2FF00DE68D7D58D12AD39 /* UnitAudioConverter-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "UnitAudioConverter-Info.plist"; sourceTree = "<group>"; };
-		2EFF9C46F7415DCD81138ABC94AC312D /* UAFileType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAFileType.swift; path = UnitAudioConverter/Classes/UAFileType.swift; sourceTree = "<group>"; };
+		27B2FD1DB4B1AC95F9522C8940130147 /* UnitAudioConverter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = UnitAudioConverter.debug.xcconfig; sourceTree = "<group>"; };
 		301016B43AEF13E1E5438A2FCBEC084C /* Pods-UnitAudioConverter_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UnitAudioConverter_Example.release.xcconfig"; sourceTree = "<group>"; };
-		3A26DB42772E58C196F22DCE91BEB213 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		497299A2410894CF7FD8FFD32F3E910A /* UnitAudioConverter-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UnitAudioConverter-dummy.m"; sourceTree = "<group>"; };
 		4CDF61F258FF9C0B128441E381F4F6AC /* Pods-UnitAudioConverter_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-UnitAudioConverter_Example-dummy.m"; sourceTree = "<group>"; };
 		527B4DCE771DFB7574C1E411090BD38B /* Pods-UnitAudioConverter_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-UnitAudioConverter_Example.modulemap"; sourceTree = "<group>"; };
 		59C6474FE05C88FA21ACEA073413CA86 /* Pods-UnitAudioConverter_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UnitAudioConverter_Example-Info.plist"; sourceTree = "<group>"; };
-		5F4DF3F257D4741BFB6C9FB93EA9B854 /* UnitAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UnitAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		65E922949E92421DA0552BBD5D1BCDEB /* UAConvertSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConvertSession.swift; path = UnitAudioConverter/Classes/UAConvertSession.swift; sourceTree = "<group>"; };
+		5F4DF3F257D4741BFB6C9FB93EA9B854 /* UnitAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = UnitAudioConverter.framework; path = UnitAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		642E96A28454F99BD90F66DE6A7447D9 /* UnitAudioConverter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = UnitAudioConverter.release.xcconfig; sourceTree = "<group>"; };
+		713B6A2FD4F4274079E46324C96B0DE2 /* UAConvertFileInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConvertFileInfo.swift; path = UnitAudioConverter/Classes/UAConvertFileInfo.swift; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		7D1D02E3CE839F51146EEEEA4880F5A4 /* UnitAudioConverter-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UnitAudioConverter-dummy.m"; sourceTree = "<group>"; };
+		7C5DAC272A669F5DC9BCDDD693919037 /* lame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = lame.h; path = UnitAudioConverter/Classes/Headers/Public/lame.h; sourceTree = "<group>"; };
 		7E14138EE85F63C91C39ACB53276129C /* Pods-UnitAudioConverter_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UnitAudioConverter_Example-umbrella.h"; sourceTree = "<group>"; };
-		8187418385988FE34E352FE66F9DE86B /* UnitAudioConverter-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UnitAudioConverter-prefix.pch"; sourceTree = "<group>"; };
-		894586036EA4D485892F149DB0DC600D /* UnitAudioConverter-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UnitAudioConverter-umbrella.h"; sourceTree = "<group>"; };
-		8D64A5768666947E84F66BC6F1A7F2AD /* UnitAudioConverter.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = UnitAudioConverter.modulemap; sourceTree = "<group>"; };
-		9D8A20E9C2E93AFEE475E5F6FA97BEA9 /* ExtAudioConverter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ExtAudioConverter.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		B0369F95F1AC5083B2EC0DCE0AE83103 /* UnitAudioConverter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = UnitAudioConverter.debug.xcconfig; sourceTree = "<group>"; };
+		7E917E08D6D1D31EB0207AA27281ED1F /* UnitAudioConverter.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = UnitAudioConverter.modulemap; sourceTree = "<group>"; };
+		846D50EE66550C46441919E6741AF352 /* libmp3lame.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libmp3lame.a; path = UnitAudioConverter/libmp3lame.a; sourceTree = "<group>"; };
+		8DC9F83AA4EA652D5944DD5B641E6F5A /* UnitAudioConverter-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UnitAudioConverter-umbrella.h"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BA533BD4AF08BCD7E05E43F8E3E7E6A0 /* Pods-UnitAudioConverter_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UnitAudioConverter_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		BB35522C16A21B4C902BC67AB2E88890 /* lame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
-		C35DA1FD019574ECCFC8BE11381D518B /* UnitAudioConverter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = UnitAudioConverter.release.xcconfig; sourceTree = "<group>"; };
-		CA9365B34527DC1F9D4C0EBB3639B2F4 /* Pods_UnitAudioConverter_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UnitAudioConverter_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD7B72C29492B8BD3729C3E2FE3CD5DB /* UAConverter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConverter.swift; path = UnitAudioConverter/Classes/UAConverter.swift; sourceTree = "<group>"; };
-		EEB0941BC4261A37470800554EA72AA2 /* UnitAudioConverter.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = UnitAudioConverter.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		FE5E367253467CFFB8F55B8EF4ECD818 /* libmp3lame.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libmp3lame.a; path = UnitAudioConverter/libmp3lame.a; sourceTree = "<group>"; };
+		C8EA2B49113732B68AB73E3F3DCF8612 /* UAConverter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConverter.swift; path = UnitAudioConverter/Classes/UAConverter.swift; sourceTree = "<group>"; };
+		CA9365B34527DC1F9D4C0EBB3639B2F4 /* Pods_UnitAudioConverter_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_UnitAudioConverter_Example.framework; path = "Pods-UnitAudioConverter_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D72E276016598B7840FB8CC67FC40805 /* UAFileType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAFileType.swift; path = UnitAudioConverter/Classes/UAFileType.swift; sourceTree = "<group>"; };
+		D926CB70A090473275E0643F90C5800F /* UnitAudioConverter-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "UnitAudioConverter-Info.plist"; sourceTree = "<group>"; };
+		EF4E33CF0D904CFA25746B5CB5294071 /* ExtAudioConverter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtAudioConverter.h; path = UnitAudioConverter/Classes/Headers/Public/ExtAudioConverter.h; sourceTree = "<group>"; };
+		F8009475438DC04F7AC0AE3EAA475AF0 /* UAConvertSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UAConvertSession.swift; path = UnitAudioConverter/Classes/UAConvertSession.swift; sourceTree = "<group>"; };
+		F8D41AEFBFBE19B97528E7CAB6A50836 /* ExtAudioConverter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtAudioConverter.m; path = UnitAudioConverter/Classes/ExtAudioConverter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,12 +83,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0FD5E07DE3711307A6D929213B3118EE /* Development Pods */ = {
+		0F4E149731CA2B656C874F9B8803C93D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				91F059076B322E85E3750B2656A0161D /* UnitAudioConverter */,
+				BF3E00BA3BCB67F372D459609A089BA0 /* UnitAudioConverter */,
 			);
-			name = "Development Pods";
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		1C78ACCFB4D39C7159681089465E3A91 /* Pods-UnitAudioConverter_Example */ = {
@@ -120,45 +117,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		512B847FCBCCA46542B4C62B1FF9FB2F /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				5A7CFBD74263BA7CBF02C03676FFBDCC /* Public */,
-			);
-			name = Headers;
-			path = UnitAudioConverter/Classes/Headers;
-			sourceTree = "<group>";
-		};
 		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
 				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
 			);
 			name = iOS;
-			sourceTree = "<group>";
-		};
-		5A7CFBD74263BA7CBF02C03676FFBDCC /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				9D8A20E9C2E93AFEE475E5F6FA97BEA9 /* ExtAudioConverter.h */,
-				BB35522C16A21B4C902BC67AB2E88890 /* lame.h */,
-			);
-			path = Public;
-			sourceTree = "<group>";
-		};
-		6D4701E3CFFCFEDCE000B8BFA0447EAB /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				8D64A5768666947E84F66BC6F1A7F2AD /* UnitAudioConverter.modulemap */,
-				7D1D02E3CE839F51146EEEEA4880F5A4 /* UnitAudioConverter-dummy.m */,
-				2D215E778AC2FF00DE68D7D58D12AD39 /* UnitAudioConverter-Info.plist */,
-				8187418385988FE34E352FE66F9DE86B /* UnitAudioConverter-prefix.pch */,
-				894586036EA4D485892F149DB0DC600D /* UnitAudioConverter-umbrella.h */,
-				B0369F95F1AC5083B2EC0DCE0AE83103 /* UnitAudioConverter.debug.xcconfig */,
-				C35DA1FD019574ECCFC8BE11381D518B /* UnitAudioConverter.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/UnitAudioConverter";
 			sourceTree = "<group>";
 		};
 		70A24F9E61B13A28652C6A0C1118920A /* Targets Support Files */ = {
@@ -169,47 +133,52 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		91F059076B322E85E3750B2656A0161D /* UnitAudioConverter */ = {
+		9CD768522482447549C13A5546EA8A30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0241CCEC888A753ED510DFFFCAA4B572 /* ExtAudioConverter.m */,
-				DD7B72C29492B8BD3729C3E2FE3CD5DB /* UAConverter.swift */,
-				084ED0E5BA1F75D74B8C2F98466FB622 /* UAConvertFileInfo.swift */,
-				65E922949E92421DA0552BBD5D1BCDEB /* UAConvertSession.swift */,
-				2EFF9C46F7415DCD81138ABC94AC312D /* UAFileType.swift */,
-				9493B1261D2F55BE1C3594E949E7D985 /* Frameworks */,
-				512B847FCBCCA46542B4C62B1FF9FB2F /* Headers */,
-				CD3213AE677EA371ACA8292EB08A6A1D /* Pod */,
-				6D4701E3CFFCFEDCE000B8BFA0447EAB /* Support Files */,
-			);
-			name = UnitAudioConverter;
-			path = ../..;
-			sourceTree = "<group>";
-		};
-		9493B1261D2F55BE1C3594E949E7D985 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				FE5E367253467CFFB8F55B8EF4ECD818 /* libmp3lame.a */,
+				846D50EE66550C46441919E6741AF352 /* libmp3lame.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CD3213AE677EA371ACA8292EB08A6A1D /* Pod */ = {
+		BF3E00BA3BCB67F372D459609A089BA0 /* UnitAudioConverter */ = {
 			isa = PBXGroup;
 			children = (
-				2160058D9F9C1034F531D0BF4459E2BA /* LICENSE */,
-				3A26DB42772E58C196F22DCE91BEB213 /* README.md */,
-				EEB0941BC4261A37470800554EA72AA2 /* UnitAudioConverter.podspec */,
+				EF4E33CF0D904CFA25746B5CB5294071 /* ExtAudioConverter.h */,
+				F8D41AEFBFBE19B97528E7CAB6A50836 /* ExtAudioConverter.m */,
+				7C5DAC272A669F5DC9BCDDD693919037 /* lame.h */,
+				C8EA2B49113732B68AB73E3F3DCF8612 /* UAConverter.swift */,
+				713B6A2FD4F4274079E46324C96B0DE2 /* UAConvertFileInfo.swift */,
+				F8009475438DC04F7AC0AE3EAA475AF0 /* UAConvertSession.swift */,
+				D72E276016598B7840FB8CC67FC40805 /* UAFileType.swift */,
+				9CD768522482447549C13A5546EA8A30 /* Frameworks */,
+				C3018B0709480E12BB8B301461BCAC0A /* Support Files */,
 			);
-			name = Pod;
+			name = UnitAudioConverter;
+			path = UnitAudioConverter;
+			sourceTree = "<group>";
+		};
+		C3018B0709480E12BB8B301461BCAC0A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				7E917E08D6D1D31EB0207AA27281ED1F /* UnitAudioConverter.modulemap */,
+				497299A2410894CF7FD8FFD32F3E910A /* UnitAudioConverter-dummy.m */,
+				D926CB70A090473275E0643F90C5800F /* UnitAudioConverter-Info.plist */,
+				0AFC0E7A7E2985D50EE18ED1768102A9 /* UnitAudioConverter-prefix.pch */,
+				8DC9F83AA4EA652D5944DD5B641E6F5A /* UnitAudioConverter-umbrella.h */,
+				27B2FD1DB4B1AC95F9522C8940130147 /* UnitAudioConverter.debug.xcconfig */,
+				642E96A28454F99BD90F66DE6A7447D9 /* UnitAudioConverter.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/UnitAudioConverter";
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				0FD5E07DE3711307A6D929213B3118EE /* Development Pods */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				0F4E149731CA2B656C874F9B8803C93D /* Pods */,
 				26152FF202CBBC27FCBCC21FBACC1815 /* Products */,
 				70A24F9E61B13A28652C6A0C1118920A /* Targets Support Files */,
 			);
@@ -226,21 +195,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		832CA95CDC3F53E008CE9B8EF5FE863A /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2300336F68DB3AA261FCFCC84F9BF6C6 /* ExtAudioConverter.h in Headers */,
-				F6A7C3B4DD8AD89BA2F160141528DE32 /* lame.h in Headers */,
-				A0B640A4687E2DDBFCF87F393DD86CAE /* UnitAudioConverter-umbrella.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		989E0E9B2672F6CD1C8D1CFE1B40C775 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				570C8150F4453EE675002F5927F4532C /* Pods-UnitAudioConverter_Example-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB482B0C4F78926415E4CF985525FC8D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEC520257F6BAB6C10AB620FA9835D01 /* ExtAudioConverter.h in Headers */,
+				81F7CC3857D4CF4ADEFABAB1F3E3A073 /* lame.h in Headers */,
+				F27BF1813DDBE0EA38CFA871FE9A3384 /* UnitAudioConverter-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,7 +228,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A16A3940B755C847CF9D64B3D3E4610A /* PBXTargetDependency */,
+				EE8226953E5D096EA5EB4F7506DA490E /* PBXTargetDependency */,
 			);
 			name = "Pods-UnitAudioConverter_Example";
 			productName = "Pods-UnitAudioConverter_Example";
@@ -270,7 +239,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 764735357E6F3197C8B469E693AA0BDB /* Build configuration list for PBXNativeTarget "UnitAudioConverter" */;
 			buildPhases = (
-				832CA95CDC3F53E008CE9B8EF5FE863A /* Headers */,
+				CB482B0C4F78926415E4CF985525FC8D /* Headers */,
 				E0FD7F4133C2FB12EC66B4B8F393E1A7 /* Sources */,
 				C078F7F4AF31F0E7B2C8D6AECD18DA5A /* Frameworks */,
 				07A4DAB995BA5A0D6AA6FC5BCE1A27F9 /* Resources */,
@@ -354,11 +323,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A16A3940B755C847CF9D64B3D3E4610A /* PBXTargetDependency */ = {
+		EE8226953E5D096EA5EB4F7506DA490E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = UnitAudioConverter;
 			target = C6141787A0BB3B94732E192375C10041 /* UnitAudioConverter */;
-			targetProxy = 41EF1BF06DE10E3300B76043986BCEFB /* PBXContainerItemProxy */;
+			targetProxy = 22C809378F7B811119BF90F2C31A84E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -391,7 +360,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -426,7 +394,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -436,7 +403,7 @@
 		};
 		5BF3EAC6D53F805A8885985BCAE814DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0369F95F1AC5083B2EC0DCE0AE83103 /* UnitAudioConverter.debug.xcconfig */;
+			baseConfigurationReference = 27B2FD1DB4B1AC95F9522C8940130147 /* UnitAudioConverter.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -468,7 +435,7 @@
 		};
 		7C1D374514EBC04D977846F99DFD90C2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C35DA1FD019574ECCFC8BE11381D518B /* UnitAudioConverter.release.xcconfig */;
+			baseConfigurationReference = 642E96A28454F99BD90F66DE6A7447D9 /* UnitAudioConverter.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -554,7 +521,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

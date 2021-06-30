@@ -55,9 +55,6 @@ extension ViewController: UITableViewDelegate {
             let fileInfo = UAConvertFileInfo(outputType: outputType, source: filePath, destination: fileDestination)
             
             UAConverter.shared.convert(fileInfo: fileInfo)
-                .progress({ progress in
-                    print("\(outputType.name): \(progress)")
-                })
                 .completion { [weak self] error in
                     print("finished: \(outputType.name)")
                     print(error as Any)
