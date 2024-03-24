@@ -85,6 +85,8 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
     lame_init_params(lame);
     
     NSString* outputFilePath = (__bridge NSString*)settings->outputFilePath;
+    outputFilePath = [outputFilePath stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLPathAllowedCharacterSet];
+    
     FILE* outputFile = fopen([outputFilePath cStringUsingEncoding:1], "wb");
     
     UInt32 sizePerBuffer = 32*1024;
