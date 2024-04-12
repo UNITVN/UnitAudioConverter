@@ -60,7 +60,7 @@ extension UAConverter {
 
 extension UAConverter {
     static func convertToM4a(file: URL, completion: @escaping ((URL) -> Void)) -> AVAssetExportSession? {
-        let convertSession = AVAssetExportSession(asset: AVAsset(url: file), presetName: AVAssetExportPresetAppleM4A)
+        let convertSession = AVAssetExportSession(asset: AVAsset(url: file), presetName: AVAssetExportPresetPassthrough)
         let outputURL = file.deletingPathExtension().appendingPathExtension("m4a")
         convertSession?.outputURL = outputURL
         convertSession?.outputFileType = .m4a
