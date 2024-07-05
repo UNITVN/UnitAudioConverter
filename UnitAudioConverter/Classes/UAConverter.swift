@@ -44,6 +44,31 @@ public class UAConverter {
         activeSessions.insert(session)
         return session
     }
+
+    @discardableResult
+    public func convert(source: URL, destination: URL, audioFormat:AudioFormatID, audioFileType: AudioFileTypeID) -> UAConvertSession {
+        let session = UAConvertSession()
+        let converter = ExtAudioConverter()
+        session.converter = converter
+        Self.convertToM4a(file: source) {[weak self] convertedFile in
+            converter.outputFile = destination.path
+            converter.inputFile = convertedFile != nil ? convertedFile!.path : source.path
+            converter.outputFormatID = audioFormat
+            converter.outputFileType = audioFileType
+            
+            DispatchQueue(label: "ExtAudioConverter").async {[weak self] in
+                let success = converter.convert()
+                if success {
+                    self?.finish(session: session, error: nil)
+                } else {
+                    self?.finish(session: session, error: ConvertError.cannotConvert)
+                }
+            }
+        }
+        
+        activeSessions.insert(session)
+        return session
+    }
     
     func finish(session: UAConvertSession, error: Error?) {
         session.state.completionBlock?(error)
