@@ -11,9 +11,11 @@ import AVFoundation
 public class UAConvertSession {
     let id: UUID = UUID()
     
-    public var avExportSession: AVAssetExportSession?
+    var avExportSession: AVAssetExportSession?
+    var workItem: DispatchWorkItem?
     var converter: ExtAudioConverter?
     
+    var isCancelled = false
     var state = MutableState()
     
     var timer: Timer?
@@ -21,6 +23,14 @@ public class UAConvertSession {
     func timer(timeInterval: TimeInterval, block: @escaping ((Timer) -> Void) ) {
         timer = Timer(timeInterval: timeInterval, repeats: true, block: block)
         timer?.fire()
+    }
+    
+    public func cancel() {
+        avExportSession?.cancelExport()
+        workItem?.cancel()
+        converter = nil
+        isCancelled = true
+        UAConverter.shared.finish(session: self, error: UAConverter.ConvertError.cancelled)
     }
     
     deinit {
