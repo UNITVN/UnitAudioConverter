@@ -11,7 +11,7 @@ import AVFoundation
 public class UAConvertSession {
     let id: UUID = UUID()
     
-    var avExportSession: AVAssetExportSession?
+    public var avExportSession: AVAssetExportSession?
     var converter: ExtAudioConverter?
     
     var state = MutableState()
