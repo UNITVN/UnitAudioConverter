@@ -86,7 +86,6 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
     
     NSString* outputFilePath = (__bridge NSString*)settings->outputFilePath;
     outputFilePath = [outputFilePath stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLPathAllowedCharacterSet];
-    outputFilePath = [outputFilePath stringByRemovingPercentEncoding];
 
     FILE* outputFile = fopen([outputFilePath cStringUsingEncoding:1], "wb");
     
@@ -266,6 +265,10 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
         startConvert(&settings);
     }
     
+    NSString* outputFilePath = [self.outputFile stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLPathAllowedCharacterSet];
+    NSString *destinationFilePath = [outputFilePath stringByRemovingPercentEncoding];
+    NSError *error;
+    [[NSFileManager defaultManager] moveItemAtPath:outputFilePath toPath:destinationFilePath error:&error];
     
     ExtAudioFileDispose(settings.inputFile);
     //AudioFileClose/ExtAudioFileDispose function is needed, or else for .wav output file the duration will be 0

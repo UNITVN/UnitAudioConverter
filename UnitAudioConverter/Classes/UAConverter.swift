@@ -50,17 +50,21 @@ public class UAConverter {
         let session = UAConvertSession()
         let converter = ExtAudioConverter()
         session.converter = converter
-        session.avExportSession = Self.convertToM4a(file: source) {[weak self] convertedFile in
+        session.avExportSession = Self.convertToM4a(file: source) { [weak self] convertedFile in
             converter.outputFile = destination.path
             converter.inputFile = convertedFile != nil ? convertedFile!.path : source.path
             converter.outputFormatID = audioFormat
             converter.outputFileType = audioFileType
-            
             let workItem = DispatchWorkItem {
-                if let success = session.converter?.convert(), session.isCancelled == false {
-                    self?.finish(session: session, error: nil)
-                } else {
-                    self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled:ConvertError.cannotConvert)
+                do {
+                    let success = session.converter?.convert()
+                    if success == true, session.isCancelled == false {
+                        self?.finish(session: session, error: nil)
+                    } else {
+                        self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+                    }
+                } catch {
+                    debugPrint("workItem convert: \(error)")
                 }
             }
             DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
@@ -93,13 +97,13 @@ extension UAConverter {
 //                print("Format compatible.")
 //            }
 //        }
-        let convertSession = AVAssetExportSession(asset: AVAsset(url: file), presetName: AVAssetExportPresetPassthrough)
+        let convertSession = AVAssetExportSession(asset: AVURLAsset(url: file), presetName: AVAssetExportPresetPassthrough)
         let outputURL = file.deletingPathExtension().appendingPathExtension("m4a")
         convertSession?.outputURL = outputURL
         convertSession?.outputFileType = .m4a
         convertSession?.exportAsynchronously {
             if let error = convertSession?.error {
-                print("Error:\n\(error)");
+                debugPrint("convertToM4a Error: \(error)");
                 completion(nil)
             } else {
                 completion(outputURL)
