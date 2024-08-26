@@ -89,27 +89,40 @@ extension UAConverter {
 }
 
 extension UAConverter {
-    static func convertToM4a(file: URL, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
-//        AVAssetExportSession.determineCompatibility(ofExportPreset: AVAssetExportPresetPassthrough, with: AVURLAsset(url: file), outputFileType: AVFileType.m4a) { isCompatible in
-//            if !isCompatible {
-//                print("Format not compatible.")
-//            } else {
-//                print("Format compatible.")
-//            }
-//        }
-        let convertSession = AVAssetExportSession(asset: AVURLAsset(url: file), presetName: AVAssetExportPresetPassthrough)
-        let outputURL = file.deletingPathExtension().appendingPathExtension("m4a")
-        convertSession?.outputURL = outputURL
-        convertSession?.outputFileType = .m4a
-        convertSession?.exportAsynchronously {
-            if let error = convertSession?.error {
+    public static func convertToM4a(file: URL, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
+        guard let exportSession = AVAssetExportSession(asset: AVURLAsset(url: file), presetName: AVAssetExportPresetAppleM4A) else {
+            completion(nil)
+            return nil
+        }
+        let dispatchGroup = DispatchGroup()
+        var isCompatible = false
+        
+        // Kiểm tra tính tương thích trước khi tiếp tục
+        dispatchGroup.enter()
+        exportSession.determineCompatibleFileTypes { compatibleTypes in
+            isCompatible = compatibleTypes.contains(.m4a)
+            dispatchGroup.leave()
+        }
+        dispatchGroup.wait()
+        if !isCompatible {
+            print("Format not compatible.")
+            completion(nil)
+            return nil
+        }
+        let tmp_name = file.deletingPathExtension().appendingPathExtension("m4a").lastPathComponent
+        let temp = FileManager.default.temporaryDirectory.appendingPathComponent(tmp_name)
+        try? FileManager.default.removeItem(at: temp)
+        exportSession.outputURL = temp
+        exportSession.outputFileType = .m4a
+        exportSession.exportAsynchronously {
+            if let error = exportSession.error {
                 debugPrint("convertToM4a Error: \(error)");
                 completion(nil)
             } else {
-                completion(outputURL)
+                completion(temp)
             }
         }
-        return convertSession
+        return exportSession
     }
     
 //    func convertAACtoWAV(inputURL: URL, outputURL: URL) {
