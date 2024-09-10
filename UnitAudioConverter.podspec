@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   
   s.platform = :ios, "13.0"
-  s.swift_version = '5.3'
+  s.swift_version = '5.0'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
   
@@ -31,8 +31,20 @@ Pod::Spec.new do |s|
    s.public_header_files = 'UnitAudioConverter/**/Headers/Public/*.h'
    s.vendored_libraries = 'UnitAudioConverter/libmp3lame.a'
   # s.frameworks = 'UIKit', 'MapKit'
-  # Swift Package dependencies
-  s.dependency 'AudioKit', '~> 5.1.0'
-  # Swift Packages support (starting with CocoaPods 1.10)
-#  s.package = { :url => 'https://github.com/AudioKit/AudioKit', :version => '5.4.0' }
+
+  # AudioKit Swift Package dependency
+  # s.dependency.source 'https://github.com/AudioKit/AudioKit'
+  s.dependency 'AudioKit', '5.1.0' #, :url => 'https://github.com/AudioKit/AudioKit.git' # nếu bạn đang dùng CocoaPods
+  # Nếu sử dụng Swift Package Manager, bạn cần thêm phần package declaration
+  # s.package { 
+  #   'name' => 'AudioKit',
+  #   'url' => 'https://github.com/AudioKit/AudioKit.git',
+  #   'version' => '5.5.0'
+  # }
+  # s.package { 
+  #   'AudioKit' => {
+  #     :url => 'https://github.com/AudioKit/AudioKit',
+  #     :version => '5.5.0'
+  #   }
+  # }
 end
