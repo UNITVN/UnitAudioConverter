@@ -8,17 +8,51 @@
 import Foundation
 import AVFoundation
 
-public enum UAFileType: Int, CaseIterable {
+public enum UAFileType: String, CaseIterable {
     case mp3
     case m4a
     case wav
     case wma
     case flac
+    case alac
     case aac
     case aiff
+    case aifc
     case ogg
+    case caf
+    case au
+    case m4r
     
-    var avFileType: AVFileType {
+    public static var allAudios: [UAFileType] {
+        return [.m4a, .aac, .caf, .mp3, .wav, .flac, .alac, .aiff, .aifc, .au] //[.mp3, .m4a, .wav, .wma, .flac, .aac, .aiff, .ogg]
+    }
+    
+    public static var allRingtones: [UAFileType] {
+        return [.m4r, .aac]
+    }
+    
+    public static var allRecorder: [UAFileType] {
+        return [.m4a]
+    }
+    
+    public static var useAVExporter: [UAFileType] {
+        return [.m4a, .aac, .caf, .flac, .alac]
+    }
+    
+    public var fileExtension: String {
+        return "\(self)"
+    }
+    
+    public var extf: String {
+        switch self {
+        case .alac:
+            return "m4a"
+        default:
+            return "\(self)"
+        }
+    }
+    
+    public var avFileType: AVFileType {
         switch self {
         case .mp3:
             return .mp3
@@ -36,48 +70,58 @@ public enum UAFileType: Int, CaseIterable {
             return .aiff
         case .ogg:
             return AVFileType(rawValue: "public.ogg-audio")
+        default:
+            return AVFileType(rawValue: "public.audio")
         }
     }
     
-    var audioFormatID: AudioFormatID {
+    public var audioFormatID: AudioFormatID {
         switch self {
         case .mp3:
             return kAudioFormatMPEGLayer3
-        case .m4a:
+        case .m4a, .caf, .aac, .m4r:
             return kAudioFormatMPEG4AAC
         case .wav:
             return kAudioFormatLinearPCM
         case .wma:
             return kAudioFormatLinearPCM
-        case .flac:
+        case .flac, .alac:
             return kAudioFormatFLAC
         case .aac:
             return kAudioFormatMPEG4AAC
-        case .aiff:
+        case .aiff, .aifc:
             return kAudioFormatLinearPCM
         case .ogg:
             return kAudioFormatFLAC
+        case .au:
+            return kAudioFormatLinearPCM
         }
     }
     
-    var audioFileTypeID: AudioFileTypeID {
+    public var audioFileTypeID: AudioFileTypeID {
         switch self {
         case .mp3:
             return kAudioFileMP3Type
-        case .m4a:
+        case .m4a, .m4r:
+            return kAudioFileM4AType
+        case .caf:
+            return kAudioFileCAFType
+        case .m4r:
             return kAudioFileM4AType
         case .wav:
             return kAudioFileWAVEType
         case .wma:
             return kAudioFileAIFFType
-        case .flac:
+        case .flac, .alac:
             return kAudioFileFLACType
         case .aac:
             return kAudioFileAAC_ADTSType
-        case .aiff:
+        case .aiff, .aifc:
             return kAudioFileAIFFType
         case .ogg:
             return kAudioFileFLACType
+        case .au:
+            return kAudioFileNextType
         }
     }
 }

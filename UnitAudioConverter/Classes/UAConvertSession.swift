@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import AudioKit
 
 public class UAConvertSession {
     let id: UUID = UUID()
@@ -14,6 +15,7 @@ public class UAConvertSession {
     var avExportSession: AVAssetExportSession?
     var workItem: DispatchWorkItem?
     var converter: ExtAudioConverter?
+    var akConverter: FormatConverter?
     
     var isCancelled = false
     var state = MutableState()

@@ -17,8 +17,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/trmquang93/UnitAudioConverter.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   
-  s.platform = :ios, "11.0"
-  s.swift_version = '5.4'
+  s.platform = :ios, "13.0"
+  s.swift_version = '5.3'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
   
@@ -31,5 +31,8 @@ Pod::Spec.new do |s|
    s.public_header_files = 'UnitAudioConverter/**/Headers/Public/*.h'
    s.vendored_libraries = 'UnitAudioConverter/libmp3lame.a'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  # Swift Package dependencies
+  s.dependency 'AudioKit', '~> 5.1.0'
+  # Swift Packages support (starting with CocoaPods 1.10)
+#  s.package = { :url => 'https://github.com/AudioKit/AudioKit', :version => '5.4.0' }
 end
