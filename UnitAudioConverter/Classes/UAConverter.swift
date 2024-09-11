@@ -7,7 +7,8 @@
 
 import Foundation
 import AVFoundation
-import AudioKit
+import AudioToolbox
+import AVFoundation
 
 public typealias UAConvertProgressBlock = (Float) -> Void
 public typealias UAConvertCompletionBlock = (Error?) -> Void
@@ -49,33 +50,7 @@ public class UAConverter {
     @discardableResult
     public func convert(source: URL, destination: URL, fileType:UAFileType) -> UAConvertSession {
         let session = UAConvertSession()
-        if fileType == .alac //m4a
-            || fileType == .flac
-        {
-            do {
-                var options = FormatConverter.Options()
-                // any options left nil will assume the value of the input file
-                options.format = fileType.extf
-                if self.checkAudioFileAccessibility(fileURL: source) {
-                    debugPrint("Warning: removing existing file at", source.path)
-                }
-                session.akConverter = FormatConverter(inputURL: source, outputURL: destination, options: options)
-                session.akConverter!.start(completionHandler: { error in
-                    DispatchQueue.main.async {
-                        if let _error = error {
-                            print("Error during convertion: \(_error)")
-                            self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-                        } else {
-                            print("Conversion Complete!")
-                            self.finish(session: session, error: nil)
-                        }
-                    }
-                })
-            } catch {
-                debugPrint("Error converting: \(error)")
-                self.finish(session: session, error: ConvertError.cannotConvert)
-            }
-        } else if fileType == .wav || fileType == .caf || fileType == .au || fileType == .aifc || fileType == .aiff{
+        if fileType == .wav || fileType == .caf || fileType == .aac || fileType == .au || fileType == .flac || fileType == .alac || fileType == .aifc || fileType == .aiff{
             let workItem = DispatchWorkItem {
                 if self.checkAudioFileAccessibility(fileURL: source) {
                     debugPrint("Warning: removing existing file at", source.path)
@@ -90,6 +65,9 @@ public class UAConverter {
                         self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
                     }
                 }
+                //                let audioConverter = ExtendedAudioFileConvertOperation(sourceURL: source, destinationURL: destination, sampleRate: 44100, outputFormat: fileType.audioFormatID)
+                //                audioConverter!.delegate = self;
+                //                audioConverter?.start()
             }
             DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
             session.workItem = workItem
@@ -235,7 +213,7 @@ extension UAConverter {
                 try inputFile.read(into: buffer)
 
                 let converter = AVAudioConverter(from: inputFile.processingFormat, to: outputFormat)!
-//                converter.convert(to: bu, from: <#T##AVAudioPCMBuffer#>)(to: outputFile, error: nil) { _ in
+//                converter.convert(to: bu, from: )(to: outputFile, error: nil) { _ in
 //                    completion(nil)
 //                }
             } catch {
@@ -245,7 +223,108 @@ extension UAConverter {
         DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
         return workItem
     }
-    
+
+
+    /*
+     // WAV CAF AU AAC ALAC FLAC AIFF AIFC
+     
+        AAC (Advanced Audio Coding)
+        Định dạng đích: kAudioFormatMPEG4AAC
+        Định dạng tệp: kAudioFileM4AType, kAudioFileAAC_ADTSType, kAudioFileAAC_ADTSType
+
+        ALAC (Apple Lossless Audio Codec)
+        Định dạng đích: kAudioFormatAppleLossless
+        Định dạng tệp: kAudioFileM4AType
+
+        FLAC (Free Lossless Audio Codec)
+        Định dạng đích: kAudioFormatFLAC
+        Định dạng tệp: kAudioFileFLACType
+
+        AIFF (Audio Interchange File Format)
+        Định dạng đích: kAudioFormatLinearPCM
+        Định dạng tệp: kAudioFileAIFFType
+
+        AIFC (Audio Interchange File Compressed)
+        Định dạng đích: kAudioFormatAppleIMA4
+        Định dạng tệp: kAudioFileAIFCType
+
+        Linear PCM (Pulse Code Modulation)
+        Định dạng đích: kAudioFormatLinearPCM
+        Định dạng tệp: kAudioFileWAVEType, kAudioFileCAFType, kAudioFileAIFFType
+        
+        Chi tiết các định dạng:
+        AAC (Advanced Audio Coding)
+        Định dạng đích: kAudioFormatMPEG4AAC
+        Định dạng tệp: kAudioFileM4AType, kAudioFileAAC_ADTSType, kAudioFileAAC_ADTSType
+        Các thuộc tính:
+        mSampleRate: Tốc độ mẫu của tệp nguồn
+        mFormatID: kAudioFormatMPEG4AAC
+        mChannelsPerFrame: Số kênh của tệp nguồn
+        mFramesPerPacket: 1024
+        mFormatFlags: AudioFormatFlags(MPEG4ObjectID.AAC_LC.rawValue)
+
+        ALAC (Apple Lossless Audio Codec)
+        Định dạng đích: kAudioFormatAppleLossless
+        Định dạng tệp: kAudioFileM4AType
+        Các thuộc tính:
+        mSampleRate: Tốc độ mẫu của tệp nguồn
+        mFormatID: kAudioFormatAppleLossless
+        mChannelsPerFrame: Số kênh của tệp nguồn
+        mFramesPerPacket: 4096
+        mFormatFlags: 0
+
+        FLAC (Free Lossless Audio Codec)
+        Định dạng đích: kAudioFormatFLAC
+        Định dạng tệp: kAudioFileFLACType
+        Các thuộc tính:
+        mSampleRate: Tốc độ mẫu của tệp nguồn
+        mFormatID: kAudioFormatFLAC
+        mChannelsPerFrame: Số kênh của tệp nguồn
+        mBitsPerChannel: 16
+        mBytesPerPacket: 0 (biến đổi)
+        mBytesPerFrame: 0 (biến đổi)
+        mFramesPerPacket: 0 (biến đổi)
+        mFormatFlags: 0
+
+        AIFF (Audio Interchange File Format)
+        Định dạng đích: kAudioFormatLinearPCM
+        Định dạng tệp: kAudioFileAIFFType
+        Các thuộc tính:
+        mSampleRate: Tốc độ mẫu của tệp nguồn
+        mFormatID: kAudioFormatLinearPCM
+        mChannelsPerFrame: Số kênh của tệp nguồn
+        mBitsPerChannel: 16
+        mBytesPerPacket: 2 * mChannelsPerFrame
+        mBytesPerFrame: 2 * mChannelsPerFrame
+        mFramesPerPacket: 1
+        mFormatFlags: kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian
+
+        AIFC (Audio Interchange File Compressed)
+        Định dạng đích: kAudioFormatAppleIMA4
+        Định dạng tệp: kAudioFileAIFCType
+        Các thuộc tính:
+        mSampleRate: Tốc độ mẫu của tệp nguồn
+        mFormatID: kAudioFormatAppleIMA4
+        mChannelsPerFrame: Số kênh của tệp nguồn
+        mBitsPerChannel: 16
+        mBytesPerPacket: 34
+        mBytesPerFrame: 2
+        mFramesPerPacket: 64
+        mFormatFlags: 0
+
+        Linear PCM (Pulse Code Modulation)
+        Định dạng đích: kAudioFormatLinearPCM
+        Định dạng tệp: kAudioFileWAVEType, kAudioFileCAFType, kAudioFileAIFFType
+        Các thuộc tính:
+        mSampleRate: 44100
+        mFormatID: audioFormat
+        mChannelsPerFrame: Số kênh của tệp nguồn
+        mBitsPerChannel: 16
+        mBytesPerPacket: 2 * mChannelsPerFrame
+        mBytesPerFrame: 2 * mChannelsPerFrame
+        mFramesPerPacket: 1
+        mFormatFlags: kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
+    */
     func convertAudio(inputURL: URL, outputURL: URL, audioType: AudioFileTypeID, audioFormat: AudioFormatID, completion: @escaping ((URL?, Error?) -> Void)) {
         var error: OSStatus = noErr
 
@@ -274,14 +353,79 @@ extension UAConverter {
             return
         }
 
-        dstFormat.mSampleRate = 44100
-        dstFormat.mFormatID = audioFormat
-        dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-        dstFormat.mBitsPerChannel = 16
-        dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
-        dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
-        dstFormat.mFramesPerPacket = 1
-        dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
+        print("Source format: \(srcFormat)")
+
+        if audioFormat == kAudioFormatMPEG4AAC {
+            // Set the destination format to AAC
+            dstFormat.mSampleRate = srcFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatMPEG4AAC
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1024
+            dstFormat.mFormatFlags = AudioFormatFlags(MPEG4ObjectID.AAC_LC.rawValue)
+            
+            var dstFormatSize: UInt32 = UInt32(MemoryLayout.size(ofValue: dstFormat))
+            error = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &dstFormatSize, &dstFormat)
+            if error != noErr {
+                completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+                return
+            }
+        } else if audioFormat == kAudioFormatAppleLossless {
+            // Set the destination format to ALAC
+            dstFormat.mSampleRate = srcFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatAppleLossless
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 4096
+            dstFormat.mFormatFlags = 0
+            
+            var dstFormatSize: UInt32 = UInt32(MemoryLayout.size(ofValue: dstFormat))
+            error = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &dstFormatSize, &dstFormat)
+            if error != noErr {
+                completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+                return
+            }
+        } else if audioFormat == kAudioFormatFLAC {
+            // Set the destination format for FLAC
+            dstFormat.mSampleRate = srcFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatFLAC
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16  // 16-bit is a common choice for FLAC, but it can be adjusted based on the source
+            dstFormat.mBytesPerPacket = 0    // FLAC is compressed, so byte size per packet is variable
+            dstFormat.mBytesPerFrame = 0     // Byte size per frame is also variable
+            dstFormat.mFramesPerPacket = 0   // Variable, let the encoder decide this
+            dstFormat.mFormatFlags = 0       // No need for format flags for FLAC
+        } else if audioFormat == kAudioFormatLinearPCM && audioType == kAudioFileAIFFType {
+            // Set the destination format for AIFF
+            dstFormat.mSampleRate = srcFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatLinearPCM
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
+            dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1
+            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian
+        } else if audioFormat == kAudioFormatAppleIMA4 && audioType == kAudioFileAIFCType {
+            // Set the destination format for AIFC
+            dstFormat.mSampleRate = srcFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatAppleIMA4
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 34
+            dstFormat.mBytesPerFrame = 2
+            dstFormat.mFramesPerPacket = 64
+            dstFormat.mFormatFlags = 0
+        }  else {
+            // Set the destination format for other formats
+            dstFormat.mSampleRate = 44100
+            dstFormat.mFormatID = audioFormat
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
+            dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1
+            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
+        }
+
+        print("Destination format: \(dstFormat)")
 
         error = ExtAudioFileCreateWithURL(
             outputURL as CFURL,
@@ -296,11 +440,23 @@ extension UAConverter {
         }
         print("Created destination file")
 
+        var clientFormat = AudioStreamBasicDescription(mSampleRate: srcFormat.mSampleRate,
+                                                       mFormatID: kAudioFormatLinearPCM,
+                                                       mFormatFlags: kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked,
+                                                       mBytesPerPacket: 4 * srcFormat.mChannelsPerFrame,
+                                                       mFramesPerPacket: 1,
+                                                       mBytesPerFrame: 4 * srcFormat.mChannelsPerFrame,
+                                                       mChannelsPerFrame: srcFormat.mChannelsPerFrame,
+                                                       mBitsPerChannel: 32,
+                                                       mReserved: 0)
+
         error = ExtAudioFileSetProperty(sourceFile!,
                                         kExtAudioFileProperty_ClientDataFormat,
-                                        thePropertySize,
-                                        &dstFormat)
+                                        UInt32(MemoryLayout.size(ofValue: clientFormat)),
+                                        &clientFormat)
         if error != noErr {
+            print("Error setting source file client format: \(error)")
+            print("clientFormat: \(clientFormat)")
             completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
             return
         }
@@ -308,8 +464,8 @@ extension UAConverter {
 
         error = ExtAudioFileSetProperty(destinationFile!,
                                         kExtAudioFileProperty_ClientDataFormat,
-                                        thePropertySize,
-                                        &dstFormat)
+                                        UInt32(MemoryLayout.size(ofValue: clientFormat)),
+                                        &clientFormat)
         if error != noErr {
             completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
             return
@@ -324,15 +480,15 @@ extension UAConverter {
             var fillBufList = AudioBufferList(
                 mNumberBuffers: 1,
                 mBuffers: AudioBuffer(
-                    mNumberChannels: 2,
+                    mNumberChannels: clientFormat.mChannelsPerFrame,
                     mDataByteSize: bufferByteSize,
                     mData: &srcBuffer
                 )
             )
             var numFrames: UInt32 = 0
 
-            if dstFormat.mBytesPerFrame > 0 {
-                numFrames = bufferByteSize / dstFormat.mBytesPerFrame
+            if clientFormat.mBytesPerFrame > 0 {
+                numFrames = bufferByteSize / clientFormat.mBytesPerFrame
             }
 
             error = ExtAudioFileRead(sourceFile!, &numFrames, &fillBufList)

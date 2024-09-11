@@ -81,6 +81,8 @@ public enum UAFileType: String, CaseIterable {
             return kAudioFormatMPEGLayer3
         case .m4a, .caf, .aac, .m4r:
             return kAudioFormatMPEG4AAC
+        case .aac:
+            return kAudioFormatMPEG4AAC
         case .wav:
             return kAudioFormatLinearPCM
         case .wma:
@@ -89,10 +91,10 @@ public enum UAFileType: String, CaseIterable {
             return kAudioFormatFLAC
         case .alac:
             return kAudioFormatAppleLossless
-        case .aac:
-            return kAudioFormatMPEG4AAC
-        case .aiff, .aifc:
+        case .aiff:
             return kAudioFormatLinearPCM
+        case .aifc:
+            return kAudioFormatAppleIMA4
         case .ogg:
             return kAudioFormatFLAC
         case .au:
@@ -112,8 +114,10 @@ public enum UAFileType: String, CaseIterable {
             return kAudioFileWAVEType
         case .wma:
             return kAudioFileAIFFType
-        case .flac, .alac:
+        case .flac:
             return kAudioFileFLACType
+        case .alac:
+            return kAudioFileM4AType
         case .aac:
             return kAudioFileAAC_ADTSType
         case .aiff:

@@ -33,14 +33,8 @@ Pod::Spec.new do |s|
   # s.frameworks = 'UIKit', 'MapKit'
 
   # AudioKit Swift Package dependency
-  # s.dependency.source 'https://github.com/AudioKit/AudioKit'
-  s.dependency 'AudioKit', '5.1.0' #, :url => 'https://github.com/AudioKit/AudioKit.git' # nếu bạn đang dùng CocoaPods
+  s.dependency 'AudioKit', '~> 5.1.0' #, :url => 'https://github.com/AudioKit/AudioKit.git' # nếu bạn đang dùng CocoaPods
   # Nếu sử dụng Swift Package Manager, bạn cần thêm phần package declaration
-  # s.package { 
-  #   'name' => 'AudioKit',
-  #   'url' => 'https://github.com/AudioKit/AudioKit.git',
-  #   'version' => '5.5.0'
-  # }
   # s.package { 
   #   'AudioKit' => {
   #     :url => 'https://github.com/AudioKit/AudioKit',
