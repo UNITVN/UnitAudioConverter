@@ -131,8 +131,9 @@ public class UAConverter {
         }
 //        else if fileType == .alac {
 //        }
-        // mp3 m4a wma flac alac aac ogg m4r 
-        //wav aiff aifc caf au
+        // mp3 m4a wma flac alac aac ogg m4r
+        
+        // wav aiff aifc caf au ==> mp3
         else {
             let converter = ExtAudioConverter()
             session.converter = converter
