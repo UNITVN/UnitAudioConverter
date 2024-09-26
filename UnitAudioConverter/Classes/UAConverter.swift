@@ -50,27 +50,26 @@ public class UAConverter {
     @discardableResult
     public func convert(source: URL, destination: URL, fileType:UAFileType) -> UAConvertSession {
         let session = UAConvertSession()
-        if fileType == .wav || fileType == .caf || fileType == .aac || fileType == .au || fileType == .flac || fileType == .alac || fileType == .aifc || fileType == .aiff{
-            let workItem = DispatchWorkItem {
-                if self.checkAudioFileAccessibility(fileURL: source) {
-                    debugPrint("Warning: removing existing file at", source.path)
-                }
-                try? FileManager.default.removeItem(at: destination)
-                self.convertAudio(inputURL: source, outputURL: destination, audioType: fileType.audioFileTypeID, audioFormat: fileType.audioFormatID) { outputURL, error in
-                    if let url = outputURL {
-                        print("Conversion Complete!")
-                        self.finish(session: session, error: nil)
-                    } else {
-                        print("Error during convertion \(error)")
-                        self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+        if fileType == .wav || fileType == .wma || fileType == .caf || fileType == .aac || fileType == .flac || fileType == .alac || fileType == .aifc || fileType == .aiff{
+            session.avExportSession = Self.convertToM4a(file: source) { [self] convertedFile in
+                let workItem = DispatchWorkItem {
+                    if self.checkAudioFileAccessibility(fileURL: convertedFile != nil ? convertedFile! : source) {
+                        debugPrint("Warning: removing existing file at \(convertedFile != nil ? convertedFile! : source)")
+                    }
+                    try? FileManager.default.removeItem(at: destination)
+                    self.convertAudio(inputURL: (convertedFile != nil ? convertedFile! : source), outputURL: destination, audioType: fileType.audioFileTypeID, audioFormat: fileType.audioFormatID) { outputURL, error in
+                        if let url = outputURL {
+                            print("Conversion Complete!")
+                            self.finish(session: session, error: nil)
+                        } else {
+                            print("Error during convertion \(error)")
+                            self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+                        }
                     }
                 }
-                //                let audioConverter = ExtendedAudioFileConvertOperation(sourceURL: source, destinationURL: destination, sampleRate: 44100, outputFormat: fileType.audioFormatID)
-                //                audioConverter!.delegate = self;
-                //                audioConverter?.start()
+                DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
+                session.workItem = workItem
             }
-            DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-            session.workItem = workItem
         } else {
             let converter = ExtAudioConverter()
             session.converter = converter
@@ -561,6 +560,16 @@ extension UAConverter {
             dstFormat.mBytesPerFrame = 2
             dstFormat.mFramesPerPacket = 64
             dstFormat.mFormatFlags = 0
+        }  else if audioFormat == kAudioFormatLinearPCM && audioType == kAudioFileNextType {
+            // Set the destination format for AU
+            dstFormat.mSampleRate = srcFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatLinearPCM
+            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
+            dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1
+            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
         }  else {
             // Set the destination format for other formats
             dstFormat.mSampleRate = 44100

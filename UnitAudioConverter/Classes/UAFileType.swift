@@ -98,7 +98,7 @@ public enum UAFileType: String, CaseIterable {
         case .ogg:
             return kAudioFormatFLAC
         case .au:
-            return kAudioFormatAC3
+            return kAudioFormatLinearPCM
         }
     }
     
