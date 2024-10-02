@@ -50,7 +50,7 @@ public class UAConverter {
     @discardableResult
     public func convert(source: URL, destination: URL, fileType:UAFileType) -> UAConvertSession {
         let session = UAConvertSession()
-        if fileType == .wav || fileType == .wma || fileType == .caf || fileType == .aac || fileType == .flac || fileType == .alac || fileType == .aifc || fileType == .aiff{
+        if fileType == .wav || fileType == .wma || fileType == .caf || fileType == .aac || fileType == .flac || fileType == .alac || fileType == .aifc || fileType == .aiff {
             session.avExportSession = Self.convertToM4a(file: source) { [self] convertedFile in
                 let workItem = DispatchWorkItem {
                     if self.checkAudioFileAccessibility(fileURL: convertedFile != nil ? convertedFile! : source) {
