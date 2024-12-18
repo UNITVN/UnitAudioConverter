@@ -87,7 +87,7 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
     NSString* outputFilePath = (__bridge NSString*)settings->outputFilePath;
     outputFilePath = [outputFilePath stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLPathAllowedCharacterSet];
 
-    FILE* outputFile = fopen([outputFilePath cStringUsingEncoding:1], "wb");
+    FILE* outputFile = fopen([outputFilePath cStringUsingEncoding:NSUTF8StringEncoding], "wb");
     
     UInt32 sizePerBuffer = 32*1024;
     UInt32 framesPerBuffer = sizePerBuffer/sizeof(SInt16);
