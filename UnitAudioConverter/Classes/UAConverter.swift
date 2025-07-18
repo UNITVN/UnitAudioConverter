@@ -45,13 +45,6 @@ public class UAConverter {
             }
             DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
             session.workItem = workItem
-//                        } else {
-//                            self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-//                        }
-//                    } catch {
-//                        debugPrint("workItem convert: \(error)")
-//                    }
-//                }
             activeSessions.insert(session)
             return session
         }
@@ -77,48 +70,6 @@ extension UAConverter {
         return asset.isPlayable
     }
     
-            completion(nil)
-            return
-        }
-        
-        let outputSettings: [String: Any]
-        switch fileType {
-        case .m4a, .aac, .m4r:
-                AVFormatIDKey: kAudioFormatMPEG4AAC,
-                AVEncoderBitRateKey: isHigh ? 96000 : 128000,
-                AVNumberOfChannelsKey: 2
-            ]
-        case .flac:
-            outputSettings = [
-                AVFormatIDKey: kAudioFormatFLAC,
-                AVSampleRateKey: 44100,
-        case .aifc:
-            outputSettings = [
-                AVFormatIDKey: kAudioFormatAppleIMA4,
-                AVSampleRateKey: 44100,
-                AVNumberOfChannelsKey: 2
-            ]
-        default:
-            completion(nil)
-            return
-        }
-        
-        guard let assetWriter = try? AVAssetWriter(outputURL: destination, fileType: .caf) else {
-            completion(nil)
-            return
-        }
-        
-        let readerOutput = AVAssetReaderAudioMixOutput(audioTracks: asset.tracks(withMediaType: .audio), audioSettings: nil)
-        assetReader.add(readerOutput)
-        
-        assetWriter.add(writerInput)
-        let processingQueue = DispatchQueue(label: "audioProcessingQueue")
-        writerInput.requestMediaDataWhenReady(on: processingQueue) {
-            while writerInput.isReadyForMoreMediaData {
-                if let sampleBuffer = readerOutput.copyNextSampleBuffer() {
-                    writerInput.markAsFinished()
-                }
-            }
     public static func convertToM4a(file: URL, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
         guard let exportSession = AVAssetExportSession(asset: AVURLAsset(url: file), presetName: AVAssetExportPresetAppleM4A) else {
             completion(nil)
