@@ -5,17 +5,14 @@
 //  Created by Quang Tran on 6/29/21.
 //
 
-import Foundation
 import AVFoundation
-import AudioKit
 
 public class UAConvertSession {
     let id: UUID = UUID()
     
     var avExportSession: AVAssetExportSession?
     var workItem: DispatchWorkItem?
-    var converter: ExtAudioConverter?
-    var akConverter: FormatConverter?
+    var mp3Converter: ExtAudioConverter?
     
     var isCancelled = false
     var state = MutableState()
@@ -30,7 +27,7 @@ public class UAConvertSession {
     public func cancel() {
         avExportSession?.cancelExport()
         workItem?.cancel()
-        converter = nil
+        mp3Converter = nil
         isCancelled = true
         UAConverter.shared.finish(session: self, error: UAConverter.ConvertError.cancelled)
     }

@@ -8,7 +8,6 @@
 import Foundation
 import AVFoundation
 import AudioToolbox
-import AVFoundation
 
 public typealias UAConvertProgressBlock = (Float) -> Void
 public typealias UAConvertCompletionBlock = (Error?) -> Void
@@ -21,149 +20,31 @@ public class UAConverter {
     private init() {
         
     }
-    
-    @discardableResult
-    public func convert(fileInfo: UAConvertFileInfo) -> UAConvertSession {
-        let session = UAConvertSession()
-        let converter = ExtAudioConverter()
-        session.converter = converter
-        Self.convertToM4a(file: fileInfo.source) {[weak self] convertedFile in
-            converter.outputFile = fileInfo.destination.path
-            converter.inputFile = convertedFile != nil ? convertedFile!.path : fileInfo.source.path
-            converter.outputFormatID = fileInfo.outputType.audioFormatID
-            converter.outputFileType = fileInfo.outputType.audioFileTypeID
-            
-            DispatchQueue(label: "ExtAudioConverter").async {[weak self] in
-                let success = converter.convert()
-                if success {
-                    self?.finish(session: session, error: nil)
-                } else {
-                    self?.finish(session: session, error: ConvertError.cannotConvert)
-                }
-            }
-        }
-        
-        activeSessions.insert(session)
-        return session
-    }
 
     @discardableResult
-    public func convert(source: URL, destination: URL, fileType:UAFileType) -> UAConvertSession {
-        let session = UAConvertSession()
-        if fileType == .wav || fileType == .wma || fileType == .caf || fileType == .aac || fileType == .flac || fileType == .alac || fileType == .aifc || fileType == .aiff {
-            session.avExportSession = Self.convertToM4a(file: source) { [self] convertedFile in
-                let workItem = DispatchWorkItem {
-                    if self.checkAudioFileAccessibility(fileURL: convertedFile != nil ? convertedFile! : source) {
-                        debugPrint("Warning: removing existing file at \(convertedFile != nil ? convertedFile! : source)")
-                    }
-                    try? FileManager.default.removeItem(at: destination)
-                    self.convertAudio(inputURL: (convertedFile != nil ? convertedFile! : source), outputURL: destination, audioType: fileType.audioFileTypeID, audioFormat: fileType.audioFormatID) { outputURL, error in
-                        if let url = outputURL {
-                            print("Conversion Complete!")
-                            self.finish(session: session, error: nil)
-                        } else {
-                            print("Error during convertion \(error)")
-                            self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-                        }
-                    }
-                }
-                DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-                session.workItem = workItem
-            }
+    public func convert(source: URL, destination: URL, outputType:UAFileType) -> UAConvertSession {
+        // Không nén
+        if outputType == .mp3 {
+            return self.convertToMP3(inputURL: source, outputURL: destination)
         } else {
-            let converter = ExtAudioConverter()
-            session.converter = converter
-            session.avExportSession = Self.convertToM4a(file: source) { [weak self] convertedFile in
-                converter.outputFile = destination.path
-                converter.inputFile = convertedFile != nil ? convertedFile!.path : source.path
-                converter.outputFormatID = fileType.audioFormatID
-                converter.outputFileType = fileType.audioFileTypeID
-                let workItem = DispatchWorkItem {
-                    do {
-                        let success = session.converter?.convert()
-                        if success == true, session.isCancelled == false {
-                            self?.finish(session: session, error: nil)
-                        } else {
-                            self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-                        }
-                    } catch {
-                        debugPrint("workItem convert: \(error)")
-                    }
-                }
-                DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-                session.workItem = workItem
-            }
-        }
-        activeSessions.insert(session)
-        return session
-    }
-
-    @discardableResult
-    public func compress(source: URL, destination: URL, fileType:UAFileType, isHigh:Bool = false) -> UAConvertSession {
-        let session = UAConvertSession()
-        if fileType == .aac {
-            let presetName = isHigh ? AVAssetExportPresetAppleM4A : AVAssetExportPresetMediumQuality
-            session.avExportSession = Self.convertToType(source: source, destination: destination, outputFileType: .m4a, presetName: presetName) { [weak self] outputURL in
-                if let url = outputURL, session.isCancelled == false {
-                    self?.finish(session: session, error: nil)
-                } else {
-                    self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-                }
-            }
-        }
-        else if fileType == .aac || fileType == .m4a || fileType == .m4r || fileType == .flac || fileType == .aifc {
+            let session = UAConvertSession()
             let workItem = DispatchWorkItem {
                 if self.checkAudioFileAccessibility(fileURL: source) {
-                    debugPrint("Warning: removing existing file at", source.path)
+                    debugPrint("Warning: removing existing file at \(source)")
                 }
                 try? FileManager.default.removeItem(at: destination)
-                self.convertToTypeUsingReaderWriter(source: source, destination: destination, fileType: fileType, isHigh: isHigh) { [weak self] outputURL in
-                    if let url = outputURL, session.isCancelled == false {
-                        self?.finish(session: session, error: nil)
-                    } else {
-                        self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-                    }
-                }
-            }
-            DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-            session.workItem = workItem
-        }
-//        else if fileType == .alac {
-//        }
-        // mp3 m4a wma flac alac aac ogg m4r
-        
-        // wav aiff aifc caf au ==> mp3
-        else {
-            let converter = ExtAudioConverter()
-            session.converter = converter
-            converter.outputFile = destination.path
-            converter.inputFile = source.path
-            converter.outputFormatID = fileType.audioFormatID
-            converter.outputFileType = fileType.audioFileTypeID
-            let workItem = DispatchWorkItem {
-                do {
-                    let success = session.converter?.convert()
-                    if success == true, session.isCancelled == false {
+                self.convertAudio(inputURL: source, outputURL: destination, audioType: outputType.audioFileTypeID, audioFormat: outputType.audioFormatID) { outputURL, error in
+                    if let url = outputURL {
+                        print("Conversion Complete!")
                         self.finish(session: session, error: nil)
                     } else {
+                        print("Error during convertion \(error)")
                         self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
                     }
-                } catch {
-                    debugPrint("workItem convert: \(error)")
                 }
             }
             DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
             session.workItem = workItem
-//            session.avExportSession = Self.convertToM4a(file: source) { [weak self] convertedFile in
-//                converter.outputFile = destination.path
-//                converter.inputFile = convertedFile != nil ? convertedFile!.path : source.path
-//                converter.outputFormatID = fileType.audioFormatID
-//                converter.outputFileType = fileType.audioFileTypeID
-//                let workItem = DispatchWorkItem {
-//                    do {
-//                        let success = session.converter?.convert()
-//                        if success == true, session.isCancelled == false {
-//                            self?.finish(session: session, error: nil)
 //                        } else {
 //                            self?.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
 //                        }
@@ -171,12 +52,9 @@ public class UAConverter {
 //                        debugPrint("workItem convert: \(error)")
 //                    }
 //                }
-//                DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-//                session.workItem = workItem
-//            }
+            activeSessions.insert(session)
+            return session
         }
-        activeSessions.insert(session)
-        return session
     }
     
     func finish(session: UAConvertSession, error: Error?) {
@@ -194,15 +72,11 @@ extension UAConverter {
 }
 
 extension UAConverter {
-
     func checkAudioFileAccessibility(fileURL: URL) -> Bool {
         let asset = AVAsset(url: fileURL)
         return asset.isPlayable
     }
     
-    func convertToTypeUsingReaderWriter(source: URL, destination: URL, fileType: UAFileType, isHigh: Bool, completion: @escaping ((URL?) -> Void)) {
-        let asset = AVAsset(url: source)
-        guard let assetReader = try? AVAssetReader(asset: asset) else {
             completion(nil)
             return
         }
@@ -210,18 +84,14 @@ extension UAConverter {
         let outputSettings: [String: Any]
         switch fileType {
         case .m4a, .aac, .m4r:
-            outputSettings = [
                 AVFormatIDKey: kAudioFormatMPEG4AAC,
                 AVEncoderBitRateKey: isHigh ? 96000 : 128000,
-                AVSampleRateKey: 44100,
                 AVNumberOfChannelsKey: 2
             ]
         case .flac:
             outputSettings = [
                 AVFormatIDKey: kAudioFormatFLAC,
                 AVSampleRateKey: 44100,
-                AVNumberOfChannelsKey: 2
-            ]
         case .aifc:
             outputSettings = [
                 AVFormatIDKey: kAudioFormatAppleIMA4,
@@ -241,33 +111,14 @@ extension UAConverter {
         let readerOutput = AVAssetReaderAudioMixOutput(audioTracks: asset.tracks(withMediaType: .audio), audioSettings: nil)
         assetReader.add(readerOutput)
         
-        let writerInput = AVAssetWriterInput(mediaType: .audio, outputSettings: outputSettings)
         assetWriter.add(writerInput)
-        
-        assetWriter.startWriting()
-        assetReader.startReading()
-        assetWriter.startSession(atSourceTime: .zero)
-        
         let processingQueue = DispatchQueue(label: "audioProcessingQueue")
         writerInput.requestMediaDataWhenReady(on: processingQueue) {
             while writerInput.isReadyForMoreMediaData {
                 if let sampleBuffer = readerOutput.copyNextSampleBuffer() {
-                    writerInput.append(sampleBuffer)
-                } else {
                     writerInput.markAsFinished()
-                    assetWriter.finishWriting {
-                        if assetWriter.status == .completed {
-                            completion(destination)
-                        } else {
-                            completion(nil)
-                        }
-                    }
-                    break
                 }
             }
-        }
-    }
-    
     public static func convertToM4a(file: URL, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
         guard let exportSession = AVAssetExportSession(asset: AVURLAsset(url: file), presetName: AVAssetExportPresetAppleM4A) else {
             completion(nil)
@@ -336,41 +187,32 @@ extension UAConverter {
         }
         return exportSession
     }
-
-    func convertToALAC(source: URL, destination: URL, completion: @escaping ((URL?) -> Void)) -> DispatchWorkItem? {
-        guard let inputFile = try? AVAudioFile(forReading: source) else {
-            debugPrint("Error reading into input/output files for reading")
-            return nil
-        }
-        if FileManager.default.fileExists(atPath: destination.path) {
-            try? FileManager.default.removeItem(at: destination)
-        }
-        
+    
+    func convertToMP3(inputURL: URL, outputURL: URL) -> UAConvertSession {
+        let session = UAConvertSession()
+        let converter = ExtAudioConverter()
+        session.mp3Converter = converter
+        converter.outputFile = outputURL.path
+        converter.inputFile = inputURL.path
+        converter.outputFormatID = UAFileType.mp3.audioFormatID
+        converter.outputFileType = UAFileType.mp3.audioFileTypeID
         let workItem = DispatchWorkItem {
             do {
-                let outputFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: inputFile.fileFormat.sampleRate, channels: inputFile.fileFormat.channelCount, interleaved: false)!
-                let outputFile = try AVAudioFile(forWriting: destination, settings: [
-                    AVFormatIDKey: kAudioFormatAppleLossless,
-                    AVSampleRateKey: inputFile.fileFormat.sampleRate,
-                    AVNumberOfChannelsKey: inputFile.fileFormat.channelCount,
-                    AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue
-                ])
-
-                let buffer = AVAudioPCMBuffer(pcmFormat: inputFile.processingFormat, frameCapacity: AVAudioFrameCount(inputFile.length))!
-                try inputFile.read(into: buffer)
-
-                let converter = AVAudioConverter(from: inputFile.processingFormat, to: outputFormat)!
-//                converter.convert(to: bu, from: )(to: outputFile, error: nil) { _ in
-//                    completion(nil)
-//                }
+                let success = session.mp3Converter?.convert()
+                if success == true, session.isCancelled == false {
+                    self.finish(session: session, error: nil)
+                } else {
+                    self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+                }
             } catch {
                 debugPrint("workItem convert: \(error)")
             }
         }
         DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-        return workItem
+        session.workItem = workItem
+        activeSessions.insert(session)
+        return session
     }
-
 
     /*
      // WAV CAF AU AAC ALAC FLAC AIFF AIFC
@@ -472,168 +314,118 @@ extension UAConverter {
         mFramesPerPacket: 1
         mFormatFlags: kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
     */
-    func convertAudio(inputURL: URL, outputURL: URL, audioType: AudioFileTypeID, audioFormat: AudioFormatID, completion: @escaping ((URL?, Error?) -> Void)) {
-        var error: OSStatus = noErr
+    func convertAudio(inputURL: URL, outputURL: URL, audioType: AudioFileTypeID, audioFormat: AudioFormatID, progress: UAConvertProgressBlock? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
 
         var destinationFile: ExtAudioFileRef? = nil
         var sourceFile: ExtAudioFileRef? = nil
 
-        var srcFormat: AudioStreamBasicDescription = AudioStreamBasicDescription()
-        var dstFormat: AudioStreamBasicDescription = AudioStreamBasicDescription()
-
+        // Định nghĩa hàm xử lý lỗi
+        let handleError = { (status: OSStatus, operation: String) -> Error? in
+            guard status != noErr else { return nil }
+            return NSError(domain: "UAConverter",
+                          code: Int(status),
+                          userInfo: [NSLocalizedDescriptionKey: "Lỗi \(operation): \(status)"])
+        }
         print("About to open \(inputURL) which has a status of \(FileManager.default.fileExists(atPath: inputURL.path)) which looks like this: \(inputURL as CFURL) as a CFURL")
         
-        error = ExtAudioFileOpenURL(inputURL as CFURL, &sourceFile)
-        if error != noErr {
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+        // 1. Mở file nguồn
+        var status = ExtAudioFileOpenURL(inputURL as CFURL, &sourceFile)
+        if let error = handleError(status, "mở file nguồn") {
+            completion(nil, error)
             return
+        }
+        // Đảm bảo resources được giải phóng khi hàm kết thúc
+        defer {
+            if let sourceFile = sourceFile {
+                ExtAudioFileDispose(sourceFile)
+            }
+            if let destinationFile = destinationFile {
+                ExtAudioFileDispose(destinationFile)
+            }
         }
         print("Opened source file")
-
-        var thePropertySize: UInt32 = UInt32(MemoryLayout.stride(ofValue: srcFormat))
-
-        error = ExtAudioFileGetProperty(sourceFile!,
-                                        kExtAudioFileProperty_FileDataFormat,
-                                        &thePropertySize, &srcFormat)
-        if error != noErr {
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+        // 2. Lấy thông tin định dạng nguồn
+        var srcFormat = AudioStreamBasicDescription()
+        var propSize = UInt32(MemoryLayout.stride(ofValue: srcFormat))
+        status = ExtAudioFileGetProperty(sourceFile!,
+                                       kExtAudioFileProperty_FileDataFormat,
+                                       &propSize, &srcFormat)
+        if let error = handleError(status, "đọc định dạng nguồn") {
+            DispatchQueue.main.async { completion(nil, error) }
             return
         }
-
-        print("Source format: \(srcFormat)")
-
-        if audioFormat == kAudioFormatMPEG4AAC {
-            // Set the destination format to AAC
-            dstFormat.mSampleRate = srcFormat.mSampleRate
-            dstFormat.mFormatID = kAudioFormatMPEG4AAC
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mFramesPerPacket = 1024
-            dstFormat.mFormatFlags = AudioFormatFlags(MPEG4ObjectID.AAC_LC.rawValue)
-            
-            var dstFormatSize: UInt32 = UInt32(MemoryLayout.size(ofValue: dstFormat))
-            error = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &dstFormatSize, &dstFormat)
-            if error != noErr {
-                completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
-                return
-            }
-        } else if audioFormat == kAudioFormatAppleLossless {
-            // Set the destination format to ALAC
-            dstFormat.mSampleRate = srcFormat.mSampleRate
-            dstFormat.mFormatID = kAudioFormatAppleLossless
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mFramesPerPacket = 4096
-            dstFormat.mFormatFlags = 0
-            
-            var dstFormatSize: UInt32 = UInt32(MemoryLayout.size(ofValue: dstFormat))
-            error = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &dstFormatSize, &dstFormat)
-            if error != noErr {
-                completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
-                return
-            }
-        } else if audioFormat == kAudioFormatFLAC {
-            // Set the destination format for FLAC
-            dstFormat.mSampleRate = srcFormat.mSampleRate
-            dstFormat.mFormatID = kAudioFormatFLAC
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mBitsPerChannel = 16  // 16-bit is a common choice for FLAC, but it can be adjusted based on the source
-            dstFormat.mBytesPerPacket = 0    // FLAC is compressed, so byte size per packet is variable
-            dstFormat.mBytesPerFrame = 0     // Byte size per frame is also variable
-            dstFormat.mFramesPerPacket = 0   // Variable, let the encoder decide this
-            dstFormat.mFormatFlags = 0       // No need for format flags for FLAC
-        } else if audioFormat == kAudioFormatLinearPCM && audioType == kAudioFileAIFFType {
-            // Set the destination format for AIFF
-            dstFormat.mSampleRate = srcFormat.mSampleRate
-            dstFormat.mFormatID = kAudioFormatLinearPCM
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mBitsPerChannel = 16
-            dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
-            dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
-            dstFormat.mFramesPerPacket = 1
-            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian
-        } else if audioFormat == kAudioFormatAppleIMA4 && audioType == kAudioFileAIFCType {
-            // Set the destination format for AIFC
-            dstFormat.mSampleRate = srcFormat.mSampleRate
-            dstFormat.mFormatID = kAudioFormatAppleIMA4
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mBitsPerChannel = 16
-            dstFormat.mBytesPerPacket = 34
-            dstFormat.mBytesPerFrame = 2
-            dstFormat.mFramesPerPacket = 64
-            dstFormat.mFormatFlags = 0
-        }  else if audioFormat == kAudioFormatLinearPCM && audioType == kAudioFileNextType {
-            // Set the destination format for AU
-            dstFormat.mSampleRate = srcFormat.mSampleRate
-            dstFormat.mFormatID = kAudioFormatLinearPCM
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mBitsPerChannel = 16
-            dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
-            dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
-            dstFormat.mFramesPerPacket = 1
-            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
-        }  else {
-            // Set the destination format for other formats
-            dstFormat.mSampleRate = 44100
-            dstFormat.mFormatID = audioFormat
-            dstFormat.mChannelsPerFrame = srcFormat.mChannelsPerFrame
-            dstFormat.mBitsPerChannel = 16
-            dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
-            dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
-            dstFormat.mFramesPerPacket = 1
-            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
-        }
-
-        print("Destination format: \(dstFormat)")
-
-        error = ExtAudioFileCreateWithURL(
+        
+        // 3. Thiết lập định dạng đích dựa vào loại audio
+        var dstFormat = self.createDestinationFormat(sourceFormat: srcFormat,
+                                                    targetFormat: audioFormat,
+                                                    audioType: audioType)
+        // 4. Tạo file đích
+        try? FileManager.default.removeItem(at: outputURL)
+        status = ExtAudioFileCreateWithURL(
             outputURL as CFURL,
             audioType,
             &dstFormat,
             nil,
             AudioFileFlags.eraseFile.rawValue,
             &destinationFile)
-        if error != noErr {
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+        
+        if let error = handleError(status, "tạo file đích") {
+            DispatchQueue.main.async { completion(nil, error) }
             return
         }
-        print("Created destination file")
-
-        var clientFormat = AudioStreamBasicDescription(mSampleRate: srcFormat.mSampleRate,
-                                                       mFormatID: kAudioFormatLinearPCM,
-                                                       mFormatFlags: kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked,
-                                                       mBytesPerPacket: 4 * srcFormat.mChannelsPerFrame,
-                                                       mFramesPerPacket: 1,
-                                                       mBytesPerFrame: 4 * srcFormat.mChannelsPerFrame,
-                                                       mChannelsPerFrame: srcFormat.mChannelsPerFrame,
-                                                       mBitsPerChannel: 32,
-                                                       mReserved: 0)
-
-        error = ExtAudioFileSetProperty(sourceFile!,
-                                        kExtAudioFileProperty_ClientDataFormat,
-                                        UInt32(MemoryLayout.size(ofValue: clientFormat)),
-                                        &clientFormat)
-        if error != noErr {
-            print("Error setting source file client format: \(error)")
-            print("clientFormat: \(clientFormat)")
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+        
+        // 5. Thiết lập định dạng client (định dạng cho xử lý trung gian)
+        var clientFormat = self.createClientFormat(sourceFormat: srcFormat)
+        
+        // Áp dụng định dạng client cho cả file nguồn và đích
+        status = ExtAudioFileSetProperty(sourceFile!,
+                                       kExtAudioFileProperty_ClientDataFormat,
+                                       UInt32(MemoryLayout.size(ofValue: clientFormat)),
+                                       &clientFormat)
+        
+        if let error = handleError(status, "thiết lập định dạng client cho nguồn") {
+            DispatchQueue.main.async { completion(nil, error) }
             return
         }
-        print("Set source file client format")
-
-        error = ExtAudioFileSetProperty(destinationFile!,
-                                        kExtAudioFileProperty_ClientDataFormat,
-                                        UInt32(MemoryLayout.size(ofValue: clientFormat)),
-                                        &clientFormat)
-        if error != noErr {
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+        
+        status = ExtAudioFileSetProperty(destinationFile!,
+                                       kExtAudioFileProperty_ClientDataFormat,
+                                       UInt32(MemoryLayout.size(ofValue: clientFormat)),
+                                       &clientFormat)
+        
+        if let error = handleError(status, "thiết lập định dạng client cho đích") {
+            DispatchQueue.main.async { completion(nil, error) }
             return
         }
-        print("Set destination file client format")
-
-        let bufferByteSize: UInt32 = 32768
-        var srcBuffer = [UInt8](repeating: 0, count: Int(bufferByteSize))
-        var sourceFrameOffset: ULONG = 0
-
+        
+        // 6. Tính toán kích thước buffer tối ưu (64KB là chuẩn tốt cho hiệu suất IO)
+        let bufferByteSize: UInt32 = 65536
+        let bufferFrameSize = bufferByteSize / clientFormat.mBytesPerFrame
+        var totalFrames: Int64 = 0
+        var processedFrames: Int64 = 0
+        // Lấy tổng số frames để tính tiến độ
+        var fileLengthInFrames: Int64 = 0
+        var sizeOfProperty = UInt32(MemoryLayout<Int64>.size)
+        ExtAudioFileGetProperty(sourceFile!,
+                              kExtAudioFileProperty_FileLengthFrames,
+                              &sizeOfProperty,
+                              &fileLengthInFrames)
+        
+        totalFrames = fileLengthInFrames
+        
+        // 7. Tiến hành chuyển đổi
+        var srcBuffer = [Float](repeating: 0, count: Int(bufferByteSize))
+        
         while true {
+            // Cập nhật tiến độ mỗi 10 lần đọc
+            if let progressHandler = progress, totalFrames > 0, processedFrames % (10 * Int64(bufferFrameSize)) == 0 {
+                let progressValue = Float(processedFrames) / Float(max(1, totalFrames))
+                DispatchQueue.main.async {
+                    progressHandler(progressValue)
+                }
+            }
+            
+            // Thiết lập buffer để đọc
             var fillBufList = AudioBufferList(
                 mNumberBuffers: 1,
                 mBuffers: AudioBuffer(
@@ -642,47 +434,113 @@ extension UAConverter {
                     mData: &srcBuffer
                 )
             )
-            var numFrames: UInt32 = 0
-
-            if clientFormat.mBytesPerFrame > 0 {
-                numFrames = bufferByteSize / clientFormat.mBytesPerFrame
-            }
-
-            error = ExtAudioFileRead(sourceFile!, &numFrames, &fillBufList)
-            if error != noErr {
-                completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+            
+            // Đọc frames từ file nguồn
+            var numFrames = bufferFrameSize
+            status = ExtAudioFileRead(sourceFile!, &numFrames, &fillBufList)
+            
+            if let error = handleError(status, "đọc dữ liệu") {
+                DispatchQueue.main.async { completion(nil, error) }
                 return
             }
-            print("Read from source file")
-
+            
+            // Nếu không còn frames nào để đọc, kết thúc
             if numFrames == 0 {
-                error = noErr
                 break
             }
-
-            sourceFrameOffset += numFrames
-            error = ExtAudioFileWrite(destinationFile!, numFrames, &fillBufList)
-            if error != noErr {
-                completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
+            
+            // Cập nhật số frames đã xử lý
+            processedFrames += Int64(numFrames)
+            
+            // Ghi dữ liệu vào file đích
+            status = ExtAudioFileWrite(destinationFile!, numFrames, &fillBufList)
+            
+            if let error = handleError(status, "ghi dữ liệu") {
+                DispatchQueue.main.async { completion(nil, error) }
                 return
             }
-            print("Wrote to destination file")
         }
-
-        error = ExtAudioFileDispose(destinationFile!)
-        if error != noErr {
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
-            return
-        }
-        print("Disposed destination file")
-
-        error = ExtAudioFileDispose(sourceFile!)
-        if error != noErr {
-            completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(error), userInfo: nil))
-            return
-        }
-        print("Disposed source file")
-
+        
+        // Báo hoàn thành
         completion(outputURL, nil)
+    }
+    
+    // Hàm hỗ trợ tạo định dạng đích
+    private func createDestinationFormat(sourceFormat: AudioStreamBasicDescription,
+                                        targetFormat: AudioFormatID,
+                                        audioType: AudioFileTypeID) -> AudioStreamBasicDescription {
+        
+        var dstFormat = AudioStreamBasicDescription()
+        
+        switch (targetFormat, audioType) {
+        case (kAudioFormatMPEG4AAC, _):
+            dstFormat.mSampleRate = sourceFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatMPEG4AAC
+            dstFormat.mChannelsPerFrame = sourceFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1024
+            dstFormat.mFormatFlags = AudioFormatFlags(MPEG4ObjectID.AAC_LC.rawValue)
+            
+        case (kAudioFormatAppleLossless, _):
+            dstFormat.mSampleRate = sourceFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatAppleLossless
+            dstFormat.mChannelsPerFrame = sourceFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 4096
+            dstFormat.mFormatFlags = 0
+            
+        case (kAudioFormatFLAC, _):
+            dstFormat.mSampleRate = sourceFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatFLAC
+            dstFormat.mChannelsPerFrame = sourceFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mFormatFlags = 0
+            
+        case (kAudioFormatLinearPCM, kAudioFileAIFFType):
+            dstFormat.mSampleRate = sourceFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatLinearPCM
+            dstFormat.mChannelsPerFrame = sourceFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 2 * sourceFormat.mChannelsPerFrame
+            dstFormat.mBytesPerFrame = 2 * sourceFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1
+            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian
+            
+        case (kAudioFormatAppleIMA4, kAudioFileAIFCType):
+            dstFormat.mSampleRate = sourceFormat.mSampleRate
+            dstFormat.mFormatID = kAudioFormatAppleIMA4
+            dstFormat.mChannelsPerFrame = sourceFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 34
+            dstFormat.mBytesPerFrame = 2
+            dstFormat.mFramesPerPacket = 64
+            dstFormat.mFormatFlags = 0
+            
+        default:
+            // Định dạng mặc định cho các trường hợp khác
+            dstFormat.mSampleRate = 44100
+            dstFormat.mFormatID = targetFormat
+            dstFormat.mChannelsPerFrame = sourceFormat.mChannelsPerFrame
+            dstFormat.mBitsPerChannel = 16
+            dstFormat.mBytesPerPacket = 2 * sourceFormat.mChannelsPerFrame
+            dstFormat.mBytesPerFrame = 2 * sourceFormat.mChannelsPerFrame
+            dstFormat.mFramesPerPacket = 1
+            dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger
+        }
+        
+        return dstFormat
+    }
+
+    // Hàm tạo định dạng client cho xử lý trung gian
+    private func createClientFormat(sourceFormat: AudioStreamBasicDescription) -> AudioStreamBasicDescription {
+        return AudioStreamBasicDescription(
+            mSampleRate: sourceFormat.mSampleRate,
+            mFormatID: kAudioFormatLinearPCM,
+            mFormatFlags: kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked,
+            mBytesPerPacket: 4 * sourceFormat.mChannelsPerFrame,
+            mFramesPerPacket: 1,
+            mBytesPerFrame: 4 * sourceFormat.mChannelsPerFrame,
+            mChannelsPerFrame: sourceFormat.mChannelsPerFrame,
+            mBitsPerChannel: 32,
+            mReserved: 0
+        )
     }
 }
