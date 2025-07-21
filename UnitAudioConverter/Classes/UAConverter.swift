@@ -16,6 +16,8 @@ public class UAConverter {
     public static let shared = UAConverter()
     
     var activeSessions: Set<UAConvertSession> = []
+    // Thêm các queue riêng biệt cho từng loại xử lý
+    private let audioProcessingQueue = DispatchQueue(label: "com.uaconverter.processing", qos: .utility)
     
     private init() {
         
@@ -24,30 +26,51 @@ public class UAConverter {
     @discardableResult
     public func convert(source: URL, destination: URL, outputType:UAFileType) -> UAConvertSession {
         // Không nén
-        if outputType == .mp3 {
-            return self.convertToMP3(inputURL: source, outputURL: destination)
-        } else {
-            let session = UAConvertSession()
-            let workItem = DispatchWorkItem {
-                if self.checkAudioFileAccessibility(fileURL: source) {
-                    debugPrint("Warning: removing existing file at \(source)")
-                }
-                try? FileManager.default.removeItem(at: destination)
-                self.convertAudio(inputURL: source, outputURL: destination, audioType: outputType.audioFileTypeID, audioFormat: outputType.audioFormatID) { outputURL, error in
-                    if let url = outputURL {
-                        print("Conversion Complete!")
-                        self.finish(session: session, error: nil)
-                    } else {
-                        print("Error during convertion \(error)")
-                        self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+        let session = UAConvertSession()
+        let _ = UAConverter.convertToM4a(fileURL: source) { convertUrl in
+            if outputType == .mp3 {
+                let converter = ExtAudioConverter()
+                session.mp3Converter = converter
+                converter.outputFile = destination.path
+                converter.inputFile = source.path
+                converter.outputFormatID = UAFileType.mp3.audioFormatID
+                converter.outputFileType = UAFileType.mp3.audioFileTypeID
+                let workItem = DispatchWorkItem {
+                    do {
+                        let success = session.mp3Converter?.convert()
+                        if success == true, session.isCancelled == false {
+                            self.finish(session: session, error: nil)
+                        } else {
+                            self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+                        }
+                    } catch {
+                        debugPrint("workItem convert: \(error)")
                     }
                 }
+                self.audioProcessingQueue.async(execute: workItem)
+                session.workItem = workItem
+            } else {
+                let workItem = DispatchWorkItem {
+                    if self.checkAudioFileAccessibility(fileURL: source) {
+                        debugPrint("Warning: removing existing file at \(source)")
+                    }
+                    try? FileManager.default.removeItem(at: destination)
+                    self.convertAudio(inputURL: source, outputURL: destination, audioType: outputType.audioFileTypeID, audioFormat: outputType.audioFormatID) { outputURL, error in
+                        if let url = outputURL {
+                            print("Conversion Complete!")
+                            self.finish(session: session, error: nil)
+                        } else {
+                            print("Error during convertion \(error)")
+                            self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
+                        }
+                    }
+                }
+                self.audioProcessingQueue.async(execute: workItem)
+                session.workItem = workItem
             }
-            DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-            session.workItem = workItem
-            activeSessions.insert(session)
-            return session
         }
+        activeSessions.insert(session)
+        return session
     }
     
     func finish(session: UAConvertSession, error: Error?) {
@@ -65,45 +88,33 @@ extension UAConverter {
 }
 
 extension UAConverter {
+    // Kiểm tra xem file có phải là video không
+    private static func isVideoFile(fileURL: URL) -> Bool {
+        let asset = AVAsset(url: fileURL)
+        // Kiểm tra xem tài nguyên có chứa track video không
+        let videoTracks = asset.tracks(withMediaType: .video)
+        return !videoTracks.isEmpty
+    }
+    
     func checkAudioFileAccessibility(fileURL: URL) -> Bool {
         let asset = AVAsset(url: fileURL)
         return asset.isPlayable
     }
     
-    public static func convertToM4a(file: URL, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
-        guard let exportSession = AVAssetExportSession(asset: AVURLAsset(url: file), presetName: AVAssetExportPresetAppleM4A) else {
-            completion(nil)
-            return nil
-        }
-        let dispatchGroup = DispatchGroup()
-        var isCompatible = false
+    // Nếu file là video, chuyển đổi sang m4a
+    // nếu file là audio, trả về file gốc
+    // nếu không phải video hoặc audio, trả về nil
+    @discardableResult
+    public static func convertToM4a(fileURL: URL, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
+        guard isVideoFile(fileURL: fileURL) == true else { completion(fileURL); return nil }
         
-        // Kiểm tra tính tương thích trước khi tiếp tục
-        dispatchGroup.enter()
-        exportSession.determineCompatibleFileTypes { compatibleTypes in
-            isCompatible = compatibleTypes.contains(.m4a)
-            dispatchGroup.leave()
+        let tmp_name = fileURL.deletingPathExtension().appendingPathExtension("m4a").lastPathComponent
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(tmp_name)
+        try? FileManager.default.removeItem(at: tempURL)
+        
+        return convertToType(source: fileURL, destination: tempURL, outputFileType: .m4a, presetName: AVAssetExportPresetAppleM4A) { url in
+            completion(url)
         }
-        dispatchGroup.wait()
-        if !isCompatible {
-            print("Format not compatible.")
-            completion(nil)
-            return nil
-        }
-        let tmp_name = file.deletingPathExtension().appendingPathExtension("m4a").lastPathComponent
-        let temp = FileManager.default.temporaryDirectory.appendingPathComponent(tmp_name)
-        try? FileManager.default.removeItem(at: temp)
-        exportSession.outputURL = temp
-        exportSession.outputFileType = .m4a
-        exportSession.exportAsynchronously {
-            if let error = exportSession.error {
-                debugPrint("convertToM4a Error: \(error)");
-                completion(nil)
-            } else {
-                completion(temp)
-            }
-        }
-        return exportSession
     }
     
     public static func convertToType(source: URL, destination: URL, outputFileType:AVFileType, presetName: String = AVAssetExportPresetPassthrough, completion: @escaping ((URL?) -> Void)) -> AVAssetExportSession? {
@@ -137,32 +148,6 @@ extension UAConverter {
             }
         }
         return exportSession
-    }
-    
-    func convertToMP3(inputURL: URL, outputURL: URL) -> UAConvertSession {
-        let session = UAConvertSession()
-        let converter = ExtAudioConverter()
-        session.mp3Converter = converter
-        converter.outputFile = outputURL.path
-        converter.inputFile = inputURL.path
-        converter.outputFormatID = UAFileType.mp3.audioFormatID
-        converter.outputFileType = UAFileType.mp3.audioFileTypeID
-        let workItem = DispatchWorkItem {
-            do {
-                let success = session.mp3Converter?.convert()
-                if success == true, session.isCancelled == false {
-                    self.finish(session: session, error: nil)
-                } else {
-                    self.finish(session: session, error: session.isCancelled ? ConvertError.cancelled : ConvertError.cannotConvert)
-                }
-            } catch {
-                debugPrint("workItem convert: \(error)")
-            }
-        }
-        DispatchQueue(label: "ExtAudioConverter").async(execute: workItem)
-        session.workItem = workItem
-        activeSessions.insert(session)
-        return session
     }
 
     /*
