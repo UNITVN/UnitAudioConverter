@@ -32,7 +32,7 @@ public class UAConverter {
                 let converter = ExtAudioConverter()
                 session.mp3Converter = converter
                 converter.outputFile = destination.path
-                converter.inputFile = source.path
+                converter.inputFile = (convertUrl ?? source).path
                 converter.outputFormatID = UAFileType.mp3.audioFormatID
                 converter.outputFileType = UAFileType.mp3.audioFileTypeID
                 let workItem = DispatchWorkItem {
@@ -51,11 +51,11 @@ public class UAConverter {
                 session.workItem = workItem
             } else {
                 let workItem = DispatchWorkItem {
-                    if self.checkAudioFileAccessibility(fileURL: source) {
-                        debugPrint("Warning: removing existing file at \(source)")
+                    if self.checkAudioFileAccessibility(fileURL: convertUrl ?? source) {
+                        debugPrint("checkAudioFileAccessibility: \(convertUrl ?? source)")
                     }
                     try? FileManager.default.removeItem(at: destination)
-                    self.convertAudio(inputURL: source, outputURL: destination, audioType: outputType.audioFileTypeID, audioFormat: outputType.audioFormatID) { outputURL, error in
+                    self.convertAudio(inputURL: convertUrl ?? source, outputURL: destination, audioType: outputType.audioFileTypeID, audioFormat: outputType.audioFormatID) { outputURL, error in
                         if let url = outputURL {
                             print("Conversion Complete!")
                             self.finish(session: session, error: nil)
