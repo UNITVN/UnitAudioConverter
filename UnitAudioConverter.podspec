@@ -11,28 +11,23 @@ Pod::Spec.new do |s|
   s.version          = '0.1.1'
   s.summary          = 'Convert audio file into different formats.'
   s.homepage         = 'https://github.com/trmquang93/UnitAudioConverter'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT' }
   s.author           = { 'Quang Tran' => 'trmquang3103@gmail.com' }
   s.source           = { :git => 'https://github.com/trmquang93/UnitAudioConverter.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-  
+
   s.platform = :ios, "13.0"
   s.swift_version = '5.0'
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
-  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
-  
+
   s.source_files = 'UnitAudioConverter/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'UnitAudioConverter' => ['UnitAudioConverter/Assets/*.png']
-  # }
+  s.public_header_files = 'UnitAudioConverter/**/Headers/Public/*.h'
+  s.preserve_paths = 'UnitAudioConverter/libmp3lame-device.a', 'UnitAudioConverter/libmp3lame-simulator.a'
 
-   s.public_header_files = 'UnitAudioConverter/**/Headers/Public/*.h'
-   s.vendored_libraries = 'UnitAudioConverter/libmp3lame.a'
-  # s.frameworks = 'UIKit', 'MapKit'
-
-  # AudioKit Swift Package dependency
-  # s.dependency 'AudioKit', '~> 5.1.0' #, :url => 'https://github.com/AudioKit/AudioKit.git' # nếu bạn đang dùng CocoaPods
-  
+  # Device and simulator arm64 slices must stay in separate archives; a single fat
+  # libmp3lame.a cannot link for both iOS and iOS Simulator on Apple Silicon.
+  lame_device = '"${PODS_TARGET_SRCROOT}/UnitAudioConverter/libmp3lame-device.a"'
+  lame_simulator = '"${PODS_TARGET_SRCROOT}/UnitAudioConverter/libmp3lame-simulator.a"'
+  s.pod_target_xcconfig = {
+    'OTHER_LDFLAGS[sdk=iphoneos*]' => "$(inherited) -force_load #{lame_device}",
+    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => "$(inherited) -force_load #{lame_simulator}"
+  }
 end
